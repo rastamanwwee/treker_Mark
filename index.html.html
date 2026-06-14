@@ -1,0 +1,5959 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Трекер прикорма Марк</title>
+  <meta name="theme-color" content="#8fc7b5" />
+  <style>
+:root {
+  --bg: #f7f3ea;
+  --panel: #fffdf8;
+  --panel-2: #ffffff;
+  --text: #27312d;
+  --muted: #76817c;
+  --brand: #7bb7a5;
+  --brand-dark: #437f70;
+  --brand-soft: #dff3ec;
+  --peach: #ffd8be;
+  --yellow: #fff1bf;
+  --red: #f2a8a0;
+  --green: #a9d8bd;
+  --line: rgba(39, 49, 45, .1);
+  --shadow: 0 18px 50px rgba(64, 92, 82, .12);
+  --radius: 26px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255, 216, 190, .65), transparent 32%),
+    radial-gradient(circle at 84% 0%, rgba(223, 243, 236, .9), transparent 34%),
+    var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+button, input, select, textarea { font: inherit; }
+
+.app-shell {
+  width: min(1180px, calc(100% - 28px));
+  margin: 0 auto;
+  padding: 18px 0 44px;
+}
+
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 250px;
+  gap: 22px;
+  align-items: stretch;
+  padding: 28px;
+  border-radius: 34px;
+  background: linear-gradient(135deg, rgba(255,255,255,.94), rgba(223,243,236,.78));
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: auto -60px -90px auto;
+  width: 260px;
+  height: 260px;
+  border-radius: 999px;
+  background: rgba(255, 216, 190, .65);
+}
+
+.hero__content, .hero__card { position: relative; z-index: 1; }
+
+.eyebrow {
+  margin: 0 0 8px;
+  font-size: 12px;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--brand-dark);
+  font-weight: 800;
+}
+
+h1, h2, h3 { margin: 0; line-height: 1.1; }
+
+h1 { font-size: clamp(32px, 6vw, 58px); letter-spacing: -0.05em; }
+h2 { font-size: clamp(26px, 4vw, 38px); letter-spacing: -0.035em; }
+h3 { font-size: 20px; letter-spacing: -0.02em; }
+
+.hero__text {
+  max-width: 680px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.55;
+  margin: 16px 0 24px;
+}
+
+.hero__actions, .form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hero__card {
+  min-height: 210px;
+  border-radius: 30px;
+  background: rgba(255,255,255,.72);
+  border: 1px solid rgba(255,255,255,.8);
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.hero__emoji {
+  font-size: 54px;
+  filter: drop-shadow(0 12px 18px rgba(67,127,112,.15));
+}
+
+.hero__card strong {
+  display: block;
+  font-size: 42px;
+  letter-spacing: -0.04em;
+}
+
+.hero__card small { color: var(--muted); }
+
+.btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 18px;
+  cursor: pointer;
+  font-weight: 800;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.btn:hover { transform: translateY(-1px); }
+
+.btn--primary {
+  color: #fff;
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+  box-shadow: 0 12px 24px rgba(67,127,112,.25);
+}
+
+.btn--ghost {
+  background: rgba(255,255,255,.82);
+  color: var(--brand-dark);
+  border: 1px solid var(--line);
+}
+
+.btn--danger {
+  color: #fff;
+  background: #c65e56;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin: 18px 0;
+  padding: 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.68);
+  box-shadow: 0 12px 28px rgba(64, 92, 82, .08);
+  overflow-x: auto;
+}
+
+.tab {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 11px 16px;
+  border-radius: 999px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tab.active {
+  color: var(--text);
+  background: #fff;
+  box-shadow: 0 8px 18px rgba(64, 92, 82, .09);
+}
+
+.panel { display: none; }
+.panel.active { display: block; animation: fadeIn .18s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+  margin: 28px 0 18px;
+}
+
+.section-head--small {
+  align-items: center;
+  margin-top: 30px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 10px 14px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+}
+
+.stat-card {
+  border-radius: 24px;
+  padding: 18px;
+  background: rgba(255,255,255,.82);
+  box-shadow: 0 10px 24px rgba(64, 92, 82, .08);
+  border: 1px solid rgba(255,255,255,.78);
+}
+
+.stat-card b {
+  display: block;
+  font-size: 34px;
+  letter-spacing: -0.04em;
+  margin-bottom: 6px;
+}
+
+.stat-card span {
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.cards-2 {
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.card, .form-card {
+  border-radius: var(--radius);
+  background: rgba(255,255,255,.82);
+  border: 1px solid rgba(255,255,255,.84);
+  box-shadow: 0 12px 32px rgba(64, 92, 82, .08);
+  padding: 20px;
+}
+
+.card__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.muted { color: var(--muted); }
+
+.link-btn {
+  border: 0;
+  background: transparent;
+  color: var(--brand-dark);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.progress-list { display: grid; gap: 14px; }
+
+.progress-row {
+  display: grid;
+  gap: 7px;
+}
+
+.progress-row__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: 800;
+}
+
+.progress {
+  height: 12px;
+  background: #eef0ec;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress > i {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--brand), var(--peach));
+  border-radius: inherit;
+}
+
+.mini-list { display: grid; gap: 10px; }
+
+.mini-item {
+  padding: 12px;
+  border-radius: 18px;
+  background: var(--brand-soft);
+  display: grid;
+  gap: 4px;
+}
+
+.mini-item small { color: var(--muted); }
+
+.tag-cloud, .category-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.tag {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 11px;
+  background: #fff;
+  font-weight: 750;
+  color: var(--text);
+}
+
+.tag--warn { background: var(--yellow); }
+.tag--red { background: #ffe3df; color: #923b34; }
+.tag--ok { background: var(--brand-soft); color: var(--brand-dark); }
+
+.filters {
+  display: grid;
+  grid-template-columns: 1.3fr .8fr .8fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.filters--compact {
+  display: flex;
+  margin: 0;
+  width: min(520px, 100%);
+}
+
+label {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+input, select, textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+  color: var(--text);
+  padding: 12px 13px;
+  outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px rgba(123,183,165,.18);
+}
+
+.category-chips { margin: 14px 0 18px; }
+
+.chip {
+  border: 0;
+  border-radius: 999px;
+  padding: 9px 13px;
+  cursor: pointer;
+  background: #fff;
+  color: var(--muted);
+  font-weight: 850;
+}
+
+.chip.active {
+  background: var(--brand-dark);
+  color: #fff;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.product-card {
+  border-radius: 24px;
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.product-card__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.product-card h3 { font-size: 18px; }
+.product-card p { margin: 0; color: var(--muted); line-height: 1.4; }
+
+.product-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.small-btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 11px;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.form-card { margin-bottom: 18px; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.span-2 { grid-column: span 2; }
+
+.form-actions { margin-top: 16px; }
+
+.table-wrap {
+  width: 100%;
+  overflow: auto;
+  border-radius: 24px;
+  background: rgba(255,255,255,.86);
+  border: 1px solid rgba(255,255,255,.86);
+  box-shadow: 0 12px 32px rgba(64, 92, 82, .08);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+th, td {
+  padding: 14px 15px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background: #fff8ec;
+  font-size: 13px;
+  color: var(--brand-dark);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+tbody tr:hover { background: rgba(223,243,236,.42); }
+
+.toast {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  max-width: min(360px, calc(100% - 36px));
+  padding: 13px 16px;
+  border-radius: 18px;
+  background: var(--text);
+  color: #fff;
+  box-shadow: 0 18px 44px rgba(0,0,0,.18);
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: .2s ease;
+  z-index: 50;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: none;
+}
+
+.danger { border-color: rgba(198,94,86,.3); }
+.tips p, .danger p { color: var(--muted); line-height: 1.55; }
+
+@media (max-width: 980px) {
+  .hero, .cards-2 { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(3, 1fr); }
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 680px) {
+  .app-shell { width: min(100% - 18px, 1180px); padding-top: 9px; }
+  .hero { padding: 22px; border-radius: 28px; }
+  .hero__text { font-size: 16px; }
+  .tabs { border-radius: 22px; }
+  .stats-grid, .filters, .form-grid, .product-grid { grid-template-columns: 1fr; }
+  .span-2 { grid-column: auto; }
+  .section-head { flex-direction: column; align-items: stretch; }
+  .filters--compact { flex-direction: column; }
+  table { min-width: 690px; }
+}
+
+</style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero">
+      <div class="hero__content">
+        <p class="eyebrow">Детский трекер питания</p>
+        <h1>Трекер прикорма Марк</h1>
+        <p class="hero__text">Главная сводка, категории продуктов, реакции, план и добавление новых продуктов — всё в одном красивом сайте.</p>
+        <div class="hero__actions">
+          <button class="btn btn--primary" data-go="entry">Добавить запись</button>
+          <button class="btn btn--ghost" data-go="add">Новый продукт</button>
+        </div>
+      </div>
+      <div class="hero__card" aria-label="Прогресс прикорма">
+        <span class="hero__emoji">🥣</span>
+        <div>
+          <strong id="heroProgress">0%</strong>
+          <small>продуктов введено</small>
+        </div>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="Навигация по трекеру">
+      <button class="tab active" data-tab="home">Главная</button>
+      <button class="tab" data-tab="products">Продукты</button>
+      <button class="tab" data-tab="entry">Ввод прикорма</button>
+      <button class="tab" data-tab="plan">План</button>
+      <button class="tab" data-tab="add">Добавить</button>
+      <button class="tab" data-tab="data">Данные</button>
+    </nav>
+
+    <main>
+      <section class="panel active" id="home">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Главная вкладка</p>
+            <h2>Сводка по прикорму</h2>
+          </div>
+          <span class="pill" id="lastDatePill">Последняя дата: —</span>
+        </div>
+
+        <div class="stats-grid" id="statsGrid"></div>
+
+        <div class="cards-2">
+          <article class="card">
+            <div class="card__head">
+              <h3>Прогресс по категориям</h3>
+              <span class="muted">выбор категорий</span>
+            </div>
+            <div id="categoryProgress" class="progress-list"></div>
+          </article>
+
+          <article class="card">
+            <div class="card__head">
+              <h3>Последние записи</h3>
+              <button class="link-btn" data-go="entry">Открыть все</button>
+            </div>
+            <div id="latestEntries" class="mini-list"></div>
+          </article>
+        </div>
+
+        <article class="card">
+          <div class="card__head">
+            <h3>Аллергены для контроля</h3>
+            <span class="muted">из списка продуктов</span>
+          </div>
+          <div id="allergenList" class="tag-cloud"></div>
+        </article>
+      </section>
+
+      <section class="panel" id="products">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Категории и продукты</p>
+            <h2>Список продуктов</h2>
+          </div>
+          <button class="btn btn--primary" data-go="add">Добавить продукт</button>
+        </div>
+
+        <div class="filters">
+          <label>
+            Поиск
+            <input id="productSearch" type="search" placeholder="Например: броколі, йогурт, рис..." />
+          </label>
+          <label>
+            Категория
+            <select id="productCategory"></select>
+          </label>
+          <label>
+            Статус
+            <select id="productStatus">
+              <option value="all">Все</option>
+              <option value="introduced">Введённые</option>
+              <option value="not">Не введённые</option>
+              <option value="allergen">Аллергены</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="category-chips" id="categoryChips"></div>
+        <div class="product-grid" id="productGrid"></div>
+      </section>
+
+      <section class="panel" id="entry">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Ежедневный ввод</p>
+            <h2>Добавить запись прикорма</h2>
+          </div>
+        </div>
+
+        <form class="form-card" id="entryForm">
+          <div class="form-grid">
+            <label>Дата<input type="date" name="date" required /></label>
+            <label>День плана<input type="number" name="planDay" min="1" placeholder="Напр. 45" /></label>
+            <label>Категория<select name="category" required></select></label>
+            <label>Продукт<select name="product" required></select></label>
+            <label>Порция/кол-во<input name="portion" placeholder="Напр. Чайная ложка +" /></label>
+            <label>Реакция<select name="reaction" required></select></label>
+            <label>Статус<select name="status" required></select></label>
+            <label class="span-2">Описание реакции<input name="reactionDescription" placeholder="Если реакции нет — можно оставить пустым" /></label>
+            <label>Стул<input name="stool" placeholder="Норма / запор / жидкий..." /></label>
+            <label>Кожа<input name="skin" placeholder="Без изменений / сыпь..." /></label>
+            <label>Сон/настроение<input name="sleepMood" placeholder="Спокойно / капризничал..." /></label>
+            <label class="span-2">Заметки<textarea name="notes" rows="3" placeholder="Любые дополнительные заметки"></textarea></label>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn--primary" type="submit">Сохранить запись</button>
+            <button class="btn btn--ghost" type="reset">Очистить</button>
+          </div>
+        </form>
+
+        <div class="section-head section-head--small">
+          <h3>История записей</h3>
+          <div class="filters filters--compact">
+            <input id="entrySearch" type="search" placeholder="Поиск по продукту или реакции" />
+            <select id="entryCategory"></select>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="entriesTable">
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>День</th>
+                <th>Категория</th>
+                <th>Продукт</th>
+                <th>Порция</th>
+                <th>Реакция</th>
+                <th>Статус</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel" id="plan">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Дополнительная вкладка</p>
+            <h2>План прикорма</h2>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="planTable">
+            <thead>
+              <tr>
+                <th>День</th>
+                <th>Крупа/крохмалисті</th>
+                <th>М’ясо/яйця</th>
+                <th>Овоч</th>
+                <th>Фрукт / або інше</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel" id="add">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">На будущее</p>
+            <h2>Добавить новый продукт</h2>
+          </div>
+        </div>
+
+        <form class="form-card" id="productForm">
+          <div class="form-grid">
+            <label>Название продукта<input name="name" required placeholder="Напр. персик" /></label>
+            <label>Категория<select name="category" required></select></label>
+            <label>Аллерген<select name="allergen"><option value="false">Нет</option><option value="true">Да</option></select></label>
+            <label>Тип аллергена<input name="allergenType" placeholder="Напр. молочный продукт" /></label>
+            <label>Статус<select name="status" required></select></label>
+            <label class="span-2">Источник/заметка<textarea name="note" rows="3" placeholder="Например: 8 месяцев, замороженный продукт, заметка врача"></textarea></label>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn--primary" type="submit">Добавить в список</button>
+            <button class="btn btn--ghost" type="reset">Очистить</button>
+          </div>
+        </form>
+
+        <article class="card tips">
+          <h3>Как это работает</h3>
+          <p>Новые продукты и записи сохраняются в браузере на этом устройстве. Можно экспортировать данные в JSON и позже импортировать обратно.</p>
+        </article>
+      </section>
+
+      <section class="panel" id="data">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Резервная копия</p>
+            <h2>Данные сайта</h2>
+          </div>
+        </div>
+        <div class="cards-2">
+          <article class="card">
+            <h3>Экспорт</h3>
+            <p class="muted">Скачайте резервную копию всех продуктов и записей.</p>
+            <button class="btn btn--primary" id="exportBtn">Скачать JSON</button>
+          </article>
+          <article class="card">
+            <h3>Импорт</h3>
+            <p class="muted">Загрузите ранее сохранённый JSON-файл.</p>
+            <input type="file" id="importInput" accept="application/json" />
+          </article>
+        </div>
+        <article class="card danger">
+          <h3>Сброс</h3>
+          <p>Вернуть данные к состоянию из загруженного Excel-файла.</p>
+          <button class="btn btn--danger" id="resetBtn">Сбросить к Excel</button>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+const INITIAL_DATA = {
+  "meta": {
+    "title": "Трекер прикорма Марк",
+    "sourceFile": "Трекер прикорма Марк - исправленный.xlsx",
+    "createdAt": "2026-06-14",
+    "version": "1.0"
+  },
+  "categories": [
+    "Крупа/крохмалисті",
+    "М’ясо/яйця",
+    "Овоч",
+    "Фрукт / або інше"
+  ],
+  "products": [
+    {
+      "id": "p001",
+      "name": "булгур",
+      "category": "Крупа/крохмалисті",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p002",
+      "name": "вівсянка",
+      "category": "Крупа/крохмалисті",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p003",
+      "name": "гречка",
+      "category": "Крупа/крохмалисті",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p004",
+      "name": "картопля",
+      "category": "Крупа/крохмалисті",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p005",
+      "name": "кукурудз. крупа з молоком",
+      "category": "Крупа/крохмалисті",
+      "allergen": true,
+      "allergenType": "молочный продукт",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p006",
+      "name": "кукурудзяна крупа",
+      "category": "Крупа/крохмалисті",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p007",
+      "name": "кускус",
+      "category": "Крупа/крохмалисті",
+      "allergen": true,
+      "allergenType": "глютен/пшеница",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p008",
+      "name": "кускус з оливк. олією",
+      "category": "Крупа/крохмалисті",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p009",
+      "name": "манна крупа",
+      "category": "Крупа/крохмалисті",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p010",
+      "name": "пшоно",
+      "category": "Крупа/крохмалисті",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p011",
+      "name": "рис",
+      "category": "Крупа/крохмалисті",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p012",
+      "name": "рис з оливк. олією",
+      "category": "Крупа/крохмалисті",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p013",
+      "name": "ячна крупа",
+      "category": "Крупа/крохмалисті",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p014",
+      "name": "кролик",
+      "category": "М’ясо/яйця",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p015",
+      "name": "курка",
+      "category": "М’ясо/яйця",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p016",
+      "name": "куряча котлета",
+      "category": "М’ясо/яйця",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p017",
+      "name": "куряче суфле",
+      "category": "М’ясо/яйця",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p018",
+      "name": "телятина",
+      "category": "М’ясо/яйця",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p019",
+      "name": "телятина з часником",
+      "category": "М’ясо/яйця",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p020",
+      "name": "хек",
+      "category": "М’ясо/яйця",
+      "allergen": true,
+      "allergenType": "рыба",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p021",
+      "name": "яйце",
+      "category": "М’ясо/яйця",
+      "allergen": true,
+      "allergenType": "яйцо",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p022",
+      "name": "яловичина",
+      "category": "М’ясо/яйця",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p023",
+      "name": "індичка",
+      "category": "М’ясо/яйця",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p024",
+      "name": "авокадо",
+      "category": "Овоч",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p025",
+      "name": "баклажан",
+      "category": "Овоч",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p026",
+      "name": "болг. перець",
+      "category": "Овоч",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p027",
+      "name": "броколі",
+      "category": "Овоч",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p028",
+      "name": "буряк",
+      "category": "Овоч",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p029",
+      "name": "гарбуз",
+      "category": "Овоч",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p030",
+      "name": "кабачок",
+      "category": "Овоч",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p031",
+      "name": "морква",
+      "category": "Овоч",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p032",
+      "name": "огірок",
+      "category": "Овоч",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p033",
+      "name": "огірок з оливковою олією",
+      "category": "Овоч",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p034",
+      "name": "помідор",
+      "category": "Овоч",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p035",
+      "name": "цвітна капуста",
+      "category": "Овоч",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p036",
+      "name": "апельсин",
+      "category": "Фрукт / або інше",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p037",
+      "name": "банан",
+      "category": "Фрукт / або інше",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p038",
+      "name": "виноград",
+      "category": "Фрукт / або інше",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p039",
+      "name": "грейпфрут",
+      "category": "Фрукт / або інше",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p040",
+      "name": "груша",
+      "category": "Фрукт / або інше",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p041",
+      "name": "полуниця",
+      "category": "Фрукт / або інше",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p042",
+      "name": "ківі",
+      "category": "Фрукт / або інше",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p043",
+      "name": "манго",
+      "category": "Фрукт / або інше",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p044",
+      "name": "мандарин",
+      "category": "Фрукт / або інше",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p045",
+      "name": "яблуко",
+      "category": "Фрукт / або інше",
+      "allergen": false,
+      "allergenType": "",
+      "note": "из плана на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p046",
+      "name": "червона сочевиця",
+      "category": "Крупа/крохмалисті",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p047",
+      "name": "батат",
+      "category": "Крупа/крохмалисті",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p048",
+      "name": "вівсянка+арахіс.паста",
+      "category": "Крупа/крохмалисті",
+      "allergen": true,
+      "allergenType": "арахис",
+      "note": "7 месяцев; новый аллерген на фото",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p049",
+      "name": "гречка+лляна олія",
+      "category": "Крупа/крохмалисті",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p050",
+      "name": "перлова крупа",
+      "category": "Крупа/крохмалисті",
+      "allergen": true,
+      "allergenType": "глютен/ячмень",
+      "note": "7 месяцев",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p051",
+      "name": "кіноа",
+      "category": "Крупа/крохмалисті",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p052",
+      "name": "нут",
+      "category": "Крупа/крохмалисті",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p053",
+      "name": "рис з кунжутом",
+      "category": "Крупа/крохмалисті",
+      "allergen": true,
+      "allergenType": "кунжут",
+      "note": "7 месяцев; новый аллерген на фото",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p054",
+      "name": "булгур з кунжутом",
+      "category": "Крупа/крохмалисті",
+      "allergen": true,
+      "allergenType": "кунжут/глютен",
+      "note": "7 месяцев; аллерген на фото",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p055",
+      "name": "булгур+оливк.олія",
+      "category": "Крупа/крохмалисті",
+      "allergen": true,
+      "allergenType": "глютен/пшеница",
+      "note": "7 месяцев",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p056",
+      "name": "пшенична крупа",
+      "category": "Крупа/крохмалисті",
+      "allergen": true,
+      "allergenType": "глютен/пшеница",
+      "note": "7 месяцев",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p057",
+      "name": "макарони цільнозернові",
+      "category": "Крупа/крохмалисті",
+      "allergen": true,
+      "allergenType": "глютен/пшеница",
+      "note": "7 месяцев",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p058",
+      "name": "лохина",
+      "category": "Фрукт / або інше",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p059",
+      "name": "котлета з телятини",
+      "category": "М’ясо/яйця",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p060",
+      "name": "грецький йогурт",
+      "category": "М’ясо/яйця",
+      "allergen": true,
+      "allergenType": "молочный продукт",
+      "note": "7 месяцев",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p061",
+      "name": "омлет зі шпинатом",
+      "category": "М’ясо/яйця",
+      "allergen": true,
+      "allergenType": "яйцо",
+      "note": "7 месяцев",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p062",
+      "name": "куряча печінка",
+      "category": "М’ясо/яйця",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p063",
+      "name": "сьомга",
+      "category": "М’ясо/яйця",
+      "allergen": true,
+      "allergenType": "рыба",
+      "note": "7 месяцев; новый аллерген на фото",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p064",
+      "name": "сосиска з телятини",
+      "category": "М’ясо/яйця",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p065",
+      "name": "кисломолочний сир",
+      "category": "М’ясо/яйця",
+      "allergen": true,
+      "allergenType": "молочный продукт",
+      "note": "7 месяцев",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p066",
+      "name": "котлета з курки та броколі",
+      "category": "М’ясо/яйця",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p067",
+      "name": "індичка",
+      "category": "М’ясо/яйця",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p068",
+      "name": "креветка",
+      "category": "М’ясо/яйця",
+      "allergen": true,
+      "allergenType": "креветка/морепродукты",
+      "note": "7 месяцев; новый аллерген на фото; может быть замороженный продукт",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p069",
+      "name": "йогурт з насінням чіа",
+      "category": "М’ясо/яйця",
+      "allergen": true,
+      "allergenType": "молочный продукт",
+      "note": "7 месяцев",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p070",
+      "name": "йогурт з чіа",
+      "category": "М’ясо/яйця",
+      "allergen": true,
+      "allergenType": "молочный продукт",
+      "note": "7 месяцев",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p071",
+      "name": "печінкове суфле",
+      "category": "М’ясо/яйця",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p072",
+      "name": "капуста",
+      "category": "Овоч",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p073",
+      "name": "стручкова квасоля",
+      "category": "Овоч",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p074",
+      "name": "огірок+орегано",
+      "category": "Овоч",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p075",
+      "name": "помідор+орегано",
+      "category": "Овоч",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p076",
+      "name": "брюсс.капуста",
+      "category": "Овоч",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев; может быть замороженный продукт",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p077",
+      "name": "кукурудза",
+      "category": "Овоч",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p078",
+      "name": "слива",
+      "category": "Фрукт / або інше",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p079",
+      "name": "ожина",
+      "category": "Фрукт / або інше",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев; может быть замороженный продукт",
+      "status": "Введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p080",
+      "name": "ананас",
+      "category": "Фрукт / або інше",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p081",
+      "name": "лимон",
+      "category": "Фрукт / або інше",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев",
+      "status": "Не введён",
+      "source": "Excel"
+    },
+    {
+      "id": "p082",
+      "name": "малина",
+      "category": "Фрукт / або інше",
+      "allergen": false,
+      "allergenType": "",
+      "note": "7 месяцев; может быть замороженный продукт",
+      "status": "Не введён",
+      "source": "Excel"
+    }
+  ],
+  "entries": [
+    {
+      "id": "e0001",
+      "number": 1,
+      "date": "2026-05-01",
+      "planDay": 1,
+      "category": "Овоч",
+      "product": "броколі",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0002",
+      "number": 2,
+      "date": "2026-05-01",
+      "planDay": 1,
+      "category": "М’ясо/яйця",
+      "product": "курка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0003",
+      "number": 3,
+      "date": "2026-05-02",
+      "planDay": 2,
+      "category": "Овоч",
+      "product": "броколі",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0004",
+      "number": 4,
+      "date": "2026-05-02",
+      "planDay": 2,
+      "category": "М’ясо/яйця",
+      "product": "курка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Срыгивание",
+      "reactionDescription": "Менее половины чай. лож. Во время кормления ",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0005",
+      "number": 5,
+      "date": "2026-05-02",
+      "planDay": 2,
+      "category": "Крупа/крохмалисті",
+      "product": "гречка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0006",
+      "number": 6,
+      "date": "2026-05-02",
+      "planDay": 2,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0007",
+      "number": 7,
+      "date": "2026-05-03",
+      "planDay": 3,
+      "category": "Крупа/крохмалисті",
+      "product": "гречка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0008",
+      "number": 8,
+      "date": "2026-05-03",
+      "planDay": 3,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0009",
+      "number": 9,
+      "date": "2026-05-03",
+      "planDay": 3,
+      "category": "М’ясо/яйця",
+      "product": "індичка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0010",
+      "number": 10,
+      "date": "2026-05-03",
+      "planDay": 3,
+      "category": "Овоч",
+      "product": "кабачок",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0011",
+      "number": 11,
+      "date": "2026-05-04",
+      "planDay": 4,
+      "category": "М’ясо/яйця",
+      "product": "індичка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0012",
+      "number": 12,
+      "date": "2026-05-04",
+      "planDay": 4,
+      "category": "Овоч",
+      "product": "кабачок",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0013",
+      "number": 13,
+      "date": "2026-05-04",
+      "planDay": 4,
+      "category": "Крупа/крохмалисті",
+      "product": "кукурудзяна крупа",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Пауза"
+    },
+    {
+      "id": "e0014",
+      "number": 14,
+      "date": "2026-05-04",
+      "planDay": 4,
+      "category": "Фрукт / або інше",
+      "product": "яблуко",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0015",
+      "number": 15,
+      "date": "2026-05-05",
+      "planDay": 5,
+      "category": "М’ясо/яйця",
+      "product": "яловичина",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0016",
+      "number": 16,
+      "date": "2026-05-05",
+      "planDay": 5,
+      "category": "Крупа/крохмалисті",
+      "product": "кукурудзяна крупа",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0017",
+      "number": 17,
+      "date": "2026-05-05",
+      "planDay": 5,
+      "category": "Овоч",
+      "product": "цвітна капуста",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0018",
+      "number": 18,
+      "date": "2026-05-05",
+      "planDay": 5,
+      "category": "Фрукт / або інше",
+      "product": "яблуко",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0019",
+      "number": 19,
+      "date": "2026-05-06",
+      "planDay": 6,
+      "category": "Крупа/крохмалисті",
+      "product": "кускус",
+      "allergen": true,
+      "allergenType": "глютен/пшеница",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0020",
+      "number": 20,
+      "date": "2026-05-06",
+      "planDay": 6,
+      "category": "Фрукт / або інше",
+      "product": "яблуко",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0021",
+      "number": 21,
+      "date": "2026-05-06",
+      "planDay": 6,
+      "category": "Овоч",
+      "product": "цвітна капуста",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0022",
+      "number": 22,
+      "date": "2026-05-06",
+      "planDay": 6,
+      "category": "М’ясо/яйця",
+      "product": "яловичина",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0023",
+      "number": 23,
+      "date": "2026-05-07",
+      "planDay": 7,
+      "category": "Крупа/крохмалисті",
+      "product": "рис",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0024",
+      "number": 24,
+      "date": "2026-05-07",
+      "planDay": 7,
+      "category": "М’ясо/яйця",
+      "product": "курка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0025",
+      "number": 25,
+      "date": "2026-05-07",
+      "planDay": 7,
+      "category": "Овоч",
+      "product": "броколі",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0026",
+      "number": 26,
+      "date": "2026-05-07",
+      "planDay": 7,
+      "category": "Фрукт / або інше",
+      "product": "ківі",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0027",
+      "number": 27,
+      "date": "2026-05-08",
+      "planDay": 8,
+      "category": "Крупа/крохмалисті",
+      "product": "кускус",
+      "allergen": true,
+      "allergenType": "глютен/пшеница",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0028",
+      "number": 28,
+      "date": "2026-05-08",
+      "planDay": 8,
+      "category": "Фрукт / або інше",
+      "product": "ківі",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0029",
+      "number": 29,
+      "date": "2026-05-08",
+      "planDay": 8,
+      "category": "Овоч",
+      "product": "кабачок",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0030",
+      "number": 30,
+      "date": "2026-05-08",
+      "planDay": 8,
+      "category": "М’ясо/яйця",
+      "product": "курка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0031",
+      "number": 31,
+      "date": "2026-05-09",
+      "planDay": 9,
+      "category": "Крупа/крохмалисті",
+      "product": "рис",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0032",
+      "number": 32,
+      "date": "2026-05-09",
+      "planDay": 9,
+      "category": "М’ясо/яйця",
+      "product": "яловичина",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0033",
+      "number": 33,
+      "date": "2026-05-09",
+      "planDay": 9,
+      "category": "Овоч",
+      "product": "кабачок",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0034",
+      "number": 34,
+      "date": "2026-05-09",
+      "planDay": 9,
+      "category": "Фрукт / або інше",
+      "product": "груша",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0035",
+      "number": 35,
+      "date": "2026-05-10",
+      "planDay": 10,
+      "category": "Крупа/крохмалисті",
+      "product": "вівсянка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0036",
+      "number": 36,
+      "date": "2026-05-10",
+      "planDay": 10,
+      "category": "М’ясо/яйця",
+      "product": "кролик",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0037",
+      "number": 37,
+      "date": "2026-05-10",
+      "planDay": 10,
+      "category": "Овоч",
+      "product": "огірок",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0038",
+      "number": 38,
+      "date": "2026-05-10",
+      "planDay": 10,
+      "category": "Фрукт / або інше",
+      "product": "груша",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0039",
+      "number": 39,
+      "date": "2026-05-11",
+      "planDay": 11,
+      "category": "Овоч",
+      "product": "огірок",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0040",
+      "number": 40,
+      "date": "2026-05-11",
+      "planDay": 11,
+      "category": "М’ясо/яйця",
+      "product": "кролик",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0041",
+      "number": 41,
+      "date": "2026-05-11",
+      "planDay": 11,
+      "category": "Крупа/крохмалисті",
+      "product": "вівсянка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0042",
+      "number": 42,
+      "date": "2026-05-11",
+      "planDay": 11,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0043",
+      "number": 43,
+      "date": "2026-05-11",
+      "planDay": 11,
+      "category": "Фрукт / або інше",
+      "product": "яблуко",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0044",
+      "number": 44,
+      "date": "2026-05-12",
+      "planDay": 12,
+      "category": "Крупа/крохмалисті",
+      "product": "гречка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0045",
+      "number": 45,
+      "date": "2026-05-12",
+      "planDay": 12,
+      "category": "М’ясо/яйця",
+      "product": "курка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0046",
+      "number": 46,
+      "date": "2026-05-12",
+      "planDay": 12,
+      "category": "Овоч",
+      "product": "броколі",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0047",
+      "number": 47,
+      "date": "2026-05-12",
+      "planDay": 12,
+      "category": "Фрукт / або інше",
+      "product": "яблуко",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0048",
+      "number": 48,
+      "date": "2026-05-12",
+      "planDay": 12,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0049",
+      "number": 49,
+      "date": "2026-05-13",
+      "planDay": 13,
+      "category": "Крупа/крохмалисті",
+      "product": "кукурудз. крупа з молоком",
+      "allergen": true,
+      "allergenType": "молочный продукт",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0050",
+      "number": 50,
+      "date": "2026-05-13",
+      "planDay": 13,
+      "category": "М’ясо/яйця",
+      "product": "яловичина",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0051",
+      "number": 51,
+      "date": "2026-05-13",
+      "planDay": 13,
+      "category": "Фрукт / або інше",
+      "product": "груша",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0052",
+      "number": 52,
+      "date": "2026-05-13",
+      "planDay": 13,
+      "category": "Овоч",
+      "product": "броколі",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0053",
+      "number": 53,
+      "date": "2026-05-14",
+      "planDay": 14,
+      "category": "Крупа/крохмалисті",
+      "product": "пшенична крупа",
+      "allergen": true,
+      "allergenType": "глютен/пшеница",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0054",
+      "number": 54,
+      "date": "2026-05-14",
+      "planDay": 14,
+      "category": "М’ясо/яйця",
+      "product": "телятина",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0055",
+      "number": 55,
+      "date": "2026-05-14",
+      "planDay": 14,
+      "category": "Овоч",
+      "product": "кабачок",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0056",
+      "number": 56,
+      "date": "2026-05-14",
+      "planDay": 14,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0057",
+      "number": 57,
+      "date": "2026-05-14",
+      "planDay": 14,
+      "category": "Фрукт / або інше",
+      "product": "полуниця",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0058",
+      "number": 58,
+      "date": "2026-05-15",
+      "planDay": 15,
+      "category": "Крупа/крохмалисті",
+      "product": "кукурудз. крупа з молоком",
+      "allergen": true,
+      "allergenType": "молочный продукт",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0059",
+      "number": 59,
+      "date": "2026-05-15",
+      "planDay": 15,
+      "category": "М’ясо/яйця",
+      "product": "курка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0060",
+      "number": 60,
+      "date": "2026-05-15",
+      "planDay": 15,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0061",
+      "number": 61,
+      "date": "2026-05-15",
+      "planDay": 15,
+      "category": "",
+      "product": "заморожена полуниця",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0062",
+      "number": 62,
+      "date": "2026-05-15",
+      "planDay": 15,
+      "category": "Овоч",
+      "product": "кабачок",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0063",
+      "number": 63,
+      "date": "2026-05-16",
+      "planDay": 16,
+      "category": "Крупа/крохмалисті",
+      "product": "пшенична крупа",
+      "allergen": true,
+      "allergenType": "глютен/пшеница",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0064",
+      "number": 64,
+      "date": "2026-05-16",
+      "planDay": 16,
+      "category": "М’ясо/яйця",
+      "product": "курка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0065",
+      "number": 65,
+      "date": "2026-05-16",
+      "planDay": 16,
+      "category": "Овоч",
+      "product": "морква",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0066",
+      "number": 66,
+      "date": "2026-05-16",
+      "planDay": 16,
+      "category": "Фрукт / або інше",
+      "product": "груша",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0067",
+      "number": 67,
+      "date": "2026-05-16",
+      "planDay": 16,
+      "category": "Фрукт / або інше",
+      "product": "яблуко",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0068",
+      "number": 68,
+      "date": "2026-05-17",
+      "planDay": 17,
+      "category": "Крупа/крохмалисті",
+      "product": "гречка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0069",
+      "number": 69,
+      "date": "2026-05-17",
+      "planDay": 17,
+      "category": "М’ясо/яйця",
+      "product": "телятина",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0070",
+      "number": 70,
+      "date": "2026-05-17",
+      "planDay": 17,
+      "category": "Овоч",
+      "product": "морква",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0071",
+      "number": 71,
+      "date": "2026-05-17",
+      "planDay": 17,
+      "category": "Фрукт / або інше",
+      "product": "груша",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0072",
+      "number": 72,
+      "date": "2026-05-17",
+      "planDay": 17,
+      "category": "Фрукт / або інше",
+      "product": "яблуко",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0073",
+      "number": 73,
+      "date": "2026-05-18",
+      "planDay": 18,
+      "category": "М’ясо/яйця",
+      "product": "яловичина",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0074",
+      "number": 74,
+      "date": "2026-05-18",
+      "planDay": 18,
+      "category": "Овоч",
+      "product": "авокадо",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0075",
+      "number": 75,
+      "date": "2026-05-18",
+      "planDay": 18,
+      "category": "Крупа/крохмалисті",
+      "product": "булгур",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0076",
+      "number": 76,
+      "date": "2026-05-18",
+      "planDay": 18,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0077",
+      "number": 77,
+      "date": "2026-05-19",
+      "planDay": 19,
+      "category": "М’ясо/яйця",
+      "product": "яйце",
+      "allergen": true,
+      "allergenType": "яйцо",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0078",
+      "number": 78,
+      "date": "2026-05-19",
+      "planDay": 19,
+      "category": "Крупа/крохмалисті",
+      "product": "вівсянка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0079",
+      "number": 79,
+      "date": "2026-05-19",
+      "planDay": 19,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0080",
+      "number": 80,
+      "date": "2026-05-19",
+      "planDay": 19,
+      "category": "Овоч",
+      "product": "авокадо",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0081",
+      "number": 81,
+      "date": "2026-05-20",
+      "planDay": 20,
+      "category": "Крупа/крохмалисті",
+      "product": "пшоно",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0082",
+      "number": 82,
+      "date": "2026-05-20",
+      "planDay": 20,
+      "category": "Фрукт / або інше",
+      "product": "яблуко",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0083",
+      "number": 83,
+      "date": "2026-05-20",
+      "planDay": 20,
+      "category": "Фрукт / або інше",
+      "product": "груша",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0084",
+      "number": 84,
+      "date": "2026-05-20",
+      "planDay": 20,
+      "category": "Овоч",
+      "product": "буряк",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0085",
+      "number": 85,
+      "date": "2026-05-20",
+      "planDay": 20,
+      "category": "М’ясо/яйця",
+      "product": "яловичина",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0086",
+      "number": 86,
+      "date": "2026-05-21",
+      "planDay": 21,
+      "category": "Крупа/крохмалисті",
+      "product": "гречка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0087",
+      "number": 87,
+      "date": "2026-05-21",
+      "planDay": 21,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0088",
+      "number": 88,
+      "date": "2026-05-21",
+      "planDay": 21,
+      "category": "Овоч",
+      "product": "буряк",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0089",
+      "number": 89,
+      "date": "2026-05-21",
+      "planDay": 21,
+      "category": "М’ясо/яйця",
+      "product": "яйце",
+      "allergen": true,
+      "allergenType": "яйцо",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0090",
+      "number": 90,
+      "date": "2026-05-22",
+      "planDay": 22,
+      "category": "Крупа/крохмалисті",
+      "product": "манна крупа",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0091",
+      "number": 91,
+      "date": "2026-05-22",
+      "planDay": 22,
+      "category": "Овоч",
+      "product": "морква",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0092",
+      "number": 92,
+      "date": "2026-05-22",
+      "planDay": 22,
+      "category": "Фрукт / або інше",
+      "product": "груша",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0093",
+      "number": 93,
+      "date": "2026-05-22",
+      "planDay": 22,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0094",
+      "number": 94,
+      "date": "2026-05-22",
+      "planDay": 22,
+      "category": "М’ясо/яйця",
+      "product": "індичка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0095",
+      "number": 95,
+      "date": "2026-05-23",
+      "planDay": 23,
+      "category": "Крупа/крохмалисті",
+      "product": "манна крупа",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0096",
+      "number": 96,
+      "date": "2026-05-23",
+      "planDay": 23,
+      "category": "Овоч",
+      "product": "баклажан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0097",
+      "number": 97,
+      "date": "2026-05-23",
+      "planDay": 23,
+      "category": "Фрукт / або інше",
+      "product": "груша",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0098",
+      "number": 98,
+      "date": "2026-05-23",
+      "planDay": 23,
+      "category": "М’ясо/яйця",
+      "product": "індичка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0099",
+      "number": 99,
+      "date": "2026-05-24",
+      "planDay": 24,
+      "category": "Крупа/крохмалисті",
+      "product": "пшоно",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0100",
+      "number": 100,
+      "date": "2026-05-24",
+      "planDay": 24,
+      "category": "Фрукт / або інше",
+      "product": "яблуко",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0101",
+      "number": 101,
+      "date": "2026-05-24",
+      "planDay": 24,
+      "category": "Фрукт / або інше",
+      "product": "груша",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0102",
+      "number": 102,
+      "date": "2026-05-24",
+      "planDay": 24,
+      "category": "Овоч",
+      "product": "баклажан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0103",
+      "number": 103,
+      "date": "2026-05-25",
+      "planDay": 25,
+      "category": "Крупа/крохмалисті",
+      "product": "рис",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0104",
+      "number": 104,
+      "date": "2026-05-25",
+      "planDay": 25,
+      "category": "Фрукт / або інше",
+      "product": "яблуко",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0105",
+      "number": 105,
+      "date": "2026-05-25",
+      "planDay": 25,
+      "category": "М’ясо/яйця",
+      "product": "індичка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0106",
+      "number": 106,
+      "date": "2026-05-25",
+      "planDay": 25,
+      "category": "Овоч",
+      "product": "гарбуз",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0107",
+      "number": 107,
+      "date": "2026-05-25",
+      "planDay": 25,
+      "category": "М’ясо/яйця",
+      "product": "грецький йогурт",
+      "allergen": true,
+      "allergenType": "молочный продукт",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0108",
+      "number": 108,
+      "date": "2026-05-26",
+      "planDay": 26,
+      "category": "Крупа/крохмалисті",
+      "product": "гречка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0109",
+      "number": 109,
+      "date": "2026-05-26",
+      "planDay": 26,
+      "category": "Овоч",
+      "product": "гарбуз",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0110",
+      "number": 110,
+      "date": "2026-05-26",
+      "planDay": 26,
+      "category": "М’ясо/яйця",
+      "product": "яловичина",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0111",
+      "number": 111,
+      "date": "2026-05-26",
+      "planDay": 26,
+      "category": "М’ясо/яйця",
+      "product": "грецький йогурт",
+      "allergen": true,
+      "allergenType": "молочный продукт",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0112",
+      "number": 112,
+      "date": "2026-05-27",
+      "planDay": 27,
+      "category": "Крупа/крохмалисті",
+      "product": "ячна крупа",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0113",
+      "number": 113,
+      "date": "2026-05-27",
+      "planDay": 27,
+      "category": "Овоч",
+      "product": "морква",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0114",
+      "number": 114,
+      "date": "2026-05-27",
+      "planDay": 27,
+      "category": "М’ясо/яйця",
+      "product": "яловичина",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0115",
+      "number": 115,
+      "date": "2026-05-27",
+      "planDay": 27,
+      "category": "Фрукт / або інше",
+      "product": "яблуко",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0116",
+      "number": 116,
+      "date": "2026-05-27",
+      "planDay": 27,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0117",
+      "number": 117,
+      "date": "2026-05-28",
+      "planDay": 28,
+      "category": "Крупа/крохмалисті",
+      "product": "кускус",
+      "allergen": true,
+      "allergenType": "глютен/пшеница",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0118",
+      "number": 118,
+      "date": "2026-05-28",
+      "planDay": 28,
+      "category": "Овоч",
+      "product": "болг. перець",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0119",
+      "number": 119,
+      "date": "2026-05-28",
+      "planDay": 28,
+      "category": "М’ясо/яйця",
+      "product": "курка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0120",
+      "number": 120,
+      "date": "2026-05-28",
+      "planDay": 28,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0121",
+      "number": 121,
+      "date": "2026-05-28",
+      "planDay": 28,
+      "category": "Фрукт / або інше",
+      "product": "яблуко",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0122",
+      "number": 122,
+      "date": "2026-05-29",
+      "planDay": 29,
+      "category": "М’ясо/яйця",
+      "product": "куряче суфле",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0123",
+      "number": 123,
+      "date": "2026-05-29",
+      "planDay": 29,
+      "category": "Крупа/крохмалисті",
+      "product": "картопля",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0124",
+      "number": 124,
+      "date": "2026-05-29",
+      "planDay": 29,
+      "category": "Овоч",
+      "product": "болг. перець",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0125",
+      "number": 125,
+      "date": "2026-05-29",
+      "planDay": 29,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0126",
+      "number": 126,
+      "date": "2026-05-29",
+      "planDay": 29,
+      "category": "Фрукт / або інше",
+      "product": "ківі",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0127",
+      "number": 127,
+      "date": "2026-05-29",
+      "planDay": 29,
+      "category": "М’ясо/яйця",
+      "product": "телятина з часником",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0128",
+      "number": 128,
+      "date": "2026-05-30",
+      "planDay": 30,
+      "category": "Крупа/крохмалисті",
+      "product": "картопля",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0129",
+      "number": 129,
+      "date": "2026-05-30",
+      "planDay": 30,
+      "category": "М’ясо/яйця",
+      "product": "куряче суфле",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0130",
+      "number": 130,
+      "date": "2026-05-30",
+      "planDay": 30,
+      "category": "Овоч",
+      "product": "кабачок",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0131",
+      "number": 131,
+      "date": "2026-05-30",
+      "planDay": 30,
+      "category": "Овоч",
+      "product": "морква",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0132",
+      "number": 132,
+      "date": "2026-05-30",
+      "planDay": 30,
+      "category": "Фрукт / або інше",
+      "product": "яблуко",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0133",
+      "number": 133,
+      "date": "2026-05-31",
+      "planDay": 31,
+      "category": "Крупа/крохмалисті",
+      "product": "вівсянка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0134",
+      "number": 134,
+      "date": "2026-05-31",
+      "planDay": 31,
+      "category": "Фрукт / або інше",
+      "product": "яблуко",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0135",
+      "number": 135,
+      "date": "2026-05-31",
+      "planDay": 31,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0136",
+      "number": 136,
+      "date": "2026-05-31",
+      "planDay": 31,
+      "category": "М’ясо/яйця",
+      "product": "куряче суфле",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0137",
+      "number": 137,
+      "date": "2026-06-01",
+      "planDay": 32,
+      "category": "Крупа/крохмалисті",
+      "product": "червона сочевиця",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0138",
+      "number": 138,
+      "date": "2026-06-01",
+      "planDay": 32,
+      "category": "Овоч",
+      "product": "броколі",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0139",
+      "number": 139,
+      "date": "2026-06-01",
+      "planDay": 32,
+      "category": "М’ясо/яйця",
+      "product": "телятина",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0140",
+      "number": 140,
+      "date": "2026-06-01",
+      "planDay": 32,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0141",
+      "number": 141,
+      "date": "2026-06-02",
+      "planDay": 33,
+      "category": "Крупа/крохмалисті",
+      "product": "червона сочевиця",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0142",
+      "number": 142,
+      "date": "2026-06-02",
+      "planDay": 33,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0143",
+      "number": 143,
+      "date": "2026-06-02",
+      "planDay": 33,
+      "category": "М’ясо/яйця",
+      "product": "телятина",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0144",
+      "number": 144,
+      "date": "2026-06-02",
+      "planDay": 33,
+      "category": "Фрукт / або інше",
+      "product": "манго",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0145",
+      "number": 145,
+      "date": "2026-06-02",
+      "planDay": 33,
+      "category": "Овоч",
+      "product": "капуста",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0146",
+      "number": 146,
+      "date": "2026-06-03",
+      "planDay": 34,
+      "category": "Фрукт / або інше",
+      "product": "манго",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0147",
+      "number": 147,
+      "date": "2026-06-03",
+      "planDay": 34,
+      "category": "Фрукт / або інше",
+      "product": "яблуко",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0148",
+      "number": 148,
+      "date": "2026-06-03",
+      "planDay": 34,
+      "category": "Крупа/крохмалисті",
+      "product": "батат",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0149",
+      "number": 149,
+      "date": "2026-06-03",
+      "planDay": 34,
+      "category": "Овоч",
+      "product": "капуста",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0150",
+      "number": 150,
+      "date": "2026-06-03",
+      "planDay": 34,
+      "category": "М’ясо/яйця",
+      "product": "яловичина",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0151",
+      "number": 151,
+      "date": "2026-06-04",
+      "planDay": 35,
+      "category": "Крупа/крохмалисті",
+      "product": "батат",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0152",
+      "number": 152,
+      "date": "2026-06-04",
+      "planDay": 35,
+      "category": "М’ясо/яйця",
+      "product": "грецький йогурт",
+      "allergen": true,
+      "allergenType": "молочный продукт",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0153",
+      "number": 153,
+      "date": "2026-06-04",
+      "planDay": 35,
+      "category": "Овоч",
+      "product": "стручкова квасоля",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0154",
+      "number": 154,
+      "date": "2026-06-04",
+      "planDay": 35,
+      "category": "Фрукт / або інше",
+      "product": "ожина",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0155",
+      "number": 155,
+      "date": "2026-06-04",
+      "planDay": 35,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0161",
+      "number": 161,
+      "date": "2026-06-04",
+      "planDay": 35,
+      "category": "М’ясо/яйця",
+      "product": "курка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0156",
+      "number": 156,
+      "date": "2026-06-05",
+      "planDay": 36,
+      "category": "Крупа/крохмалисті",
+      "product": "вівсянка+арахіс.паста",
+      "allergen": true,
+      "allergenType": "арахис",
+      "portion": "Менее пол. чай",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0157",
+      "number": 157,
+      "date": "2026-06-05",
+      "planDay": 36,
+      "category": "М’ясо/яйця",
+      "product": "грецький йогурт",
+      "allergen": true,
+      "allergenType": "молочный продукт",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0159",
+      "number": 159,
+      "date": "2026-06-05",
+      "planDay": 36,
+      "category": "Овоч",
+      "product": "стручкова квасоля",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0160",
+      "number": 160,
+      "date": "2026-06-05",
+      "planDay": 36,
+      "category": "Фрукт / або інше",
+      "product": "ожина",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Пауза"
+    },
+    {
+      "id": "e0170",
+      "number": 170,
+      "date": "2026-06-05",
+      "planDay": 36,
+      "category": "Фрукт / або інше",
+      "product": "ківі",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0169",
+      "number": 169,
+      "date": "2026-06-05",
+      "planDay": 36,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0168",
+      "number": 168,
+      "date": "2026-06-05",
+      "planDay": 36,
+      "category": "Фрукт / або інше",
+      "product": "груша",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0162",
+      "number": 162,
+      "date": "2026-06-06",
+      "planDay": 37,
+      "category": "М’ясо/яйця",
+      "product": "омлет зі шпинатом",
+      "allergen": true,
+      "allergenType": "яйцо",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0163",
+      "number": 163,
+      "date": "2026-06-06",
+      "planDay": 37,
+      "category": "Крупа/крохмалисті",
+      "product": "гречка+лляна олія",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0164",
+      "number": 164,
+      "date": "2026-06-06",
+      "planDay": 37,
+      "category": "Овоч",
+      "product": "броколі",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0165",
+      "number": 165,
+      "date": "2026-06-06",
+      "planDay": 37,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0166",
+      "number": 166,
+      "date": "2026-06-06",
+      "planDay": 37,
+      "category": "Фрукт / або інше",
+      "product": "груша",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0167",
+      "number": 167,
+      "date": "2026-06-06",
+      "planDay": 37,
+      "category": "Фрукт / або інше",
+      "product": "ківі",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0171",
+      "number": 171,
+      "date": "2026-06-07",
+      "planDay": 38,
+      "category": "Крупа/крохмалисті",
+      "product": "вівсянка+арахіс.паста",
+      "allergen": true,
+      "allergenType": "арахис",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0172",
+      "number": 172,
+      "date": "2026-06-07",
+      "planDay": 38,
+      "category": "Фрукт / або інше",
+      "product": "яблуко",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0173",
+      "number": 173,
+      "date": "2026-06-07",
+      "planDay": 38,
+      "category": "М’ясо/яйця",
+      "product": "омлет зі шпинатом",
+      "allergen": true,
+      "allergenType": "яйцо",
+      "portion": "Чайная ложка",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0174",
+      "number": 174,
+      "date": "2026-06-07",
+      "planDay": 38,
+      "category": "Овоч",
+      "product": "броколі",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0175",
+      "number": 175,
+      "date": "2026-06-08",
+      "planDay": 39,
+      "category": "Овоч",
+      "product": "гарбуз",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0176",
+      "number": 176,
+      "date": "2026-06-08",
+      "planDay": 39,
+      "category": "М’ясо/яйця",
+      "product": "курка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0177",
+      "number": 177,
+      "date": "2026-06-08",
+      "planDay": 39,
+      "category": "Крупа/крохмалисті",
+      "product": "рис",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Запор",
+      "reactionDescription": "Густой стул 2 дня",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0178",
+      "number": 178,
+      "date": "2026-06-08",
+      "planDay": 39,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0179",
+      "number": 179,
+      "date": "2026-06-08",
+      "planDay": 39,
+      "category": "Фрукт / або інше",
+      "product": "манго",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0180",
+      "number": 180,
+      "date": "2026-06-08",
+      "planDay": 39,
+      "category": "Фрукт / або інше",
+      "product": "груша",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Запор",
+      "reactionDescription": "Густой стул 2 дня",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0181",
+      "number": 181,
+      "date": "2026-06-08",
+      "planDay": 39,
+      "category": "Фрукт / або інше",
+      "product": "апельсин",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0182",
+      "number": 182,
+      "date": "2026-06-09",
+      "planDay": 40,
+      "category": "Овоч",
+      "product": "гарбуз",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0183",
+      "number": 183,
+      "date": "2026-06-09",
+      "planDay": 40,
+      "category": "М’ясо/яйця",
+      "product": "куряча печінка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0184",
+      "number": 184,
+      "date": "2026-06-09",
+      "planDay": 40,
+      "category": "М’ясо/яйця",
+      "product": "курка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0185",
+      "number": 185,
+      "date": "2026-06-09",
+      "planDay": 40,
+      "category": "Фрукт / або інше",
+      "product": "груша",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0186",
+      "number": 186,
+      "date": "2026-06-09",
+      "planDay": 40,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0187",
+      "number": 187,
+      "date": "2026-06-09",
+      "planDay": 40,
+      "category": "Фрукт / або інше",
+      "product": "манго",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0188",
+      "number": 188,
+      "date": "2026-06-09",
+      "planDay": 40,
+      "category": "Фрукт / або інше",
+      "product": "апельсин",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0189",
+      "number": 189,
+      "date": "2026-06-10",
+      "planDay": 41,
+      "category": "Крупа/крохмалисті",
+      "product": "перлова крупа",
+      "allergen": true,
+      "allergenType": "глютен/ячмень",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0190",
+      "number": 190,
+      "date": "2026-06-10",
+      "planDay": 41,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0191",
+      "number": 191,
+      "date": "2026-06-10",
+      "planDay": 41,
+      "category": "Фрукт / або інше",
+      "product": "яблуко",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0192",
+      "number": 192,
+      "date": "2026-06-10",
+      "planDay": 41,
+      "category": "М’ясо/яйця",
+      "product": "хек",
+      "allergen": true,
+      "allergenType": "рыба",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0193",
+      "number": 193,
+      "date": "2026-06-10",
+      "planDay": 41,
+      "category": "Овоч",
+      "product": "авокадо",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0194",
+      "number": 194,
+      "date": "2026-06-11",
+      "planDay": 42,
+      "category": "Крупа/крохмалисті",
+      "product": "кіноа",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0195",
+      "number": 195,
+      "date": "2026-06-11",
+      "planDay": 42,
+      "category": "Фрукт / або інше",
+      "product": "лохина",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0196",
+      "number": 196,
+      "date": "2026-06-11",
+      "planDay": 42,
+      "category": "Овоч",
+      "product": "огірок+орегано",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Пол чай. лож.",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Введён"
+    },
+    {
+      "id": "e0197",
+      "number": 197,
+      "date": "2026-06-11",
+      "planDay": 42,
+      "category": "М’ясо/яйця",
+      "product": "курка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0198",
+      "number": 198,
+      "date": "2026-06-11",
+      "planDay": 42,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0199",
+      "number": 199,
+      "date": "2026-06-12",
+      "planDay": 43,
+      "category": "Фрукт / або інше",
+      "product": "лохина",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0200",
+      "number": 200,
+      "date": "2026-06-12",
+      "planDay": 43,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0201",
+      "number": 201,
+      "date": "2026-06-12",
+      "planDay": 43,
+      "category": "Овоч",
+      "product": "морква",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0202",
+      "number": 202,
+      "date": "2026-06-12",
+      "planDay": 43,
+      "category": "М’ясо/яйця",
+      "product": "курка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0203",
+      "number": 203,
+      "date": "2026-06-12",
+      "planDay": 43,
+      "category": "Крупа/крохмалисті",
+      "product": "кіноа",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0204",
+      "number": 204,
+      "date": "2026-06-13",
+      "planDay": 44,
+      "category": "Крупа/крохмалисті",
+      "product": "вівсянка",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0205",
+      "number": 205,
+      "date": "2026-06-13",
+      "planDay": 44,
+      "category": "М’ясо/яйця",
+      "product": "телятина",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0206",
+      "number": 206,
+      "date": "2026-06-13",
+      "planDay": 44,
+      "category": "Овоч",
+      "product": "гарбуз",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    },
+    {
+      "id": "e0207",
+      "number": 207,
+      "date": "2026-06-13",
+      "planDay": 44,
+      "category": "Фрукт / або інше",
+      "product": "банан",
+      "allergen": false,
+      "allergenType": "",
+      "portion": "Чайная ложка +",
+      "reaction": "Нет реакции",
+      "reactionDescription": "",
+      "stool": "",
+      "skin": "",
+      "sleepMood": "",
+      "notes": "",
+      "status": "Повтор"
+    }
+  ],
+  "plan": [
+    {
+      "day": 1,
+      "grain": "",
+      "protein": "курка",
+      "vegetable": "броколі",
+      "fruit": ""
+    },
+    {
+      "day": 2,
+      "grain": "гречка",
+      "protein": "курка",
+      "vegetable": "броколі",
+      "fruit": "банан"
+    },
+    {
+      "day": 3,
+      "grain": "гречка",
+      "protein": "індичка",
+      "vegetable": "кабачок",
+      "fruit": "банан"
+    },
+    {
+      "day": 4,
+      "grain": "кукурудзяна крупа",
+      "protein": "індичка",
+      "vegetable": "кабачок",
+      "fruit": "яблуко"
+    },
+    {
+      "day": 5,
+      "grain": "кукурудзяна крупа",
+      "protein": "телятина",
+      "vegetable": "цвітна капуста",
+      "fruit": "яблуко"
+    },
+    {
+      "day": 6,
+      "grain": "кускус",
+      "protein": "телятина",
+      "vegetable": "цвітна капуста",
+      "fruit": "яблуко"
+    },
+    {
+      "day": 7,
+      "grain": "рис",
+      "protein": "курка",
+      "vegetable": "броколі",
+      "fruit": "ківі"
+    },
+    {
+      "day": 8,
+      "grain": "кускус",
+      "protein": "курка",
+      "vegetable": "кабачок",
+      "fruit": "ківі"
+    },
+    {
+      "day": 9,
+      "grain": "рис з оливк. олією",
+      "protein": "кролик",
+      "vegetable": "кабачок",
+      "fruit": "груша"
+    },
+    {
+      "day": 10,
+      "grain": "вівсянка",
+      "protein": "кролик",
+      "vegetable": "помідор",
+      "fruit": "груша"
+    },
+    {
+      "day": 11,
+      "grain": "вівсянка",
+      "protein": "куряча котлета",
+      "vegetable": "помідор",
+      "fruit": "апельсин"
+    },
+    {
+      "day": 12,
+      "grain": "гречка",
+      "protein": "куряча котлетка",
+      "vegetable": "огірок",
+      "fruit": "апельсин"
+    },
+    {
+      "day": 13,
+      "grain": "кукурудз. крупа з молоком",
+      "protein": "телятина",
+      "vegetable": "огірок",
+      "fruit": "банан"
+    },
+    {
+      "day": 14,
+      "grain": "крупа пшенична Артек",
+      "protein": "телятина",
+      "vegetable": "кабачок",
+      "fruit": "заморожена полуниця"
+    },
+    {
+      "day": 15,
+      "grain": "кукурудз. крупа з молоком",
+      "protein": "курка",
+      "vegetable": "кабачок",
+      "fruit": "заморожена полуниця"
+    },
+    {
+      "day": 16,
+      "grain": "крупа пшенична Артек",
+      "protein": "курка",
+      "vegetable": "морква",
+      "fruit": "грейпфрут"
+    },
+    {
+      "day": 17,
+      "grain": "булгур",
+      "protein": "яловичина",
+      "vegetable": "морква",
+      "fruit": "грейпфрут"
+    },
+    {
+      "day": 18,
+      "grain": "булгур",
+      "protein": "яловичина",
+      "vegetable": "авокадо",
+      "fruit": "виноград"
+    },
+    {
+      "day": 19,
+      "grain": "вівсянка",
+      "protein": "яйце",
+      "vegetable": "авокадо",
+      "fruit": "виноград"
+    },
+    {
+      "day": 20,
+      "grain": "пшоно",
+      "protein": "індичка",
+      "vegetable": "буряк",
+      "fruit": "банан"
+    },
+    {
+      "day": 21,
+      "grain": "пшоно",
+      "protein": "яйце",
+      "vegetable": "буряк",
+      "fruit": "банан"
+    },
+    {
+      "day": 22,
+      "grain": "манна крупа",
+      "protein": "індичка",
+      "vegetable": "броколі",
+      "fruit": "манго"
+    },
+    {
+      "day": 23,
+      "grain": "манна крупа",
+      "protein": "індичка",
+      "vegetable": "баклажан",
+      "fruit": "манго"
+    },
+    {
+      "day": 24,
+      "grain": "гречка",
+      "protein": "хек",
+      "vegetable": "баклажан",
+      "fruit": "яблуко"
+    },
+    {
+      "day": 25,
+      "grain": "ячна крупа",
+      "protein": "куряче суфле",
+      "vegetable": "гарбуз",
+      "fruit": "грецький йогурт 8-10%"
+    },
+    {
+      "day": 26,
+      "grain": "ячна крупа",
+      "protein": "хек",
+      "vegetable": "гарбуз",
+      "fruit": "грецький йогурт 8-10%"
+    },
+    {
+      "day": 27,
+      "grain": "кускус з оливк. олією",
+      "protein": "куряче суфле",
+      "vegetable": "болг. перець",
+      "fruit": "мандарин"
+    },
+    {
+      "day": 28,
+      "grain": "кускус з олією",
+      "protein": "телятина з часником",
+      "vegetable": "болг. перець",
+      "fruit": "мандарин"
+    },
+    {
+      "day": 29,
+      "grain": "картопля",
+      "protein": "телятина з часником",
+      "vegetable": "помідор",
+      "fruit": "заморожена полуниця"
+    },
+    {
+      "day": 30,
+      "grain": "картопля",
+      "protein": "куряча котлетка",
+      "vegetable": "огірок з олією",
+      "fruit": "заморожена полуниця"
+    },
+    {
+      "day": 31,
+      "grain": "лохина",
+      "protein": "",
+      "vegetable": "",
+      "fruit": ""
+    }
+  ],
+  "reactions": [
+    "Нет реакции",
+    "Лёгкая сыпь",
+    "Покраснение",
+    "Зуд",
+    "Вздутие/газики",
+    "Срыгивание",
+    "Жидкий стул",
+    "Запор",
+    "Колики/плач",
+    "Отказ от еды",
+    "Другая реакция"
+  ],
+  "statuses": [
+    "Введён",
+    "Повтор",
+    "Пауза",
+    "Не подошёл",
+    "Не введён"
+  ]
+};
+
+</script>
+<script>
+
+const STORAGE_KEY = "mark_feeding_tracker_v1";
+let state = loadState();
+
+const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
+function loadState() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      return normalizeState(parsed);
+    } catch (error) {
+      console.warn("Could not parse saved data", error);
+    }
+  }
+  return normalizeState(structuredClone(INITIAL_DATA));
+}
+
+function normalizeState(data) {
+  data.categories = [...new Set([...(data.categories || []), ...(data.products || []).map(p => p.category).filter(Boolean)])];
+  data.reactions = data.reactions?.length ? data.reactions : ["Нет реакции", "Лёгкая сыпь", "Покраснение", "Зуд", "Вздутие/газики", "Срыгивание", "Жидкий стул", "Запор", "Колики/плач", "Отказ от еды", "Другая реакция"];
+  data.statuses = [...new Set([...(data.statuses || []), "Не введён", "Введён", "Повтор", "Пауза", "Не подошёл"])];
+  data.products = data.products || [];
+  data.entries = data.entries || [];
+  data.plan = data.plan || [];
+  return data;
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function showToast(message) {
+  const toast = $("#toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => toast.classList.remove("show"), 2600);
+}
+
+function formatDate(date) {
+  if (!date) return "—";
+  try {
+    return new Intl.DateTimeFormat("ru-RU").format(new Date(date + "T00:00:00"));
+  } catch {
+    return date;
+  }
+}
+
+function isIntroduced(product) {
+  return product.status === "Введён" || state.entries.some(e => e.product === product.name && ["Введён", "Повтор"].includes(e.status));
+}
+
+function getStats() {
+  const total = state.products.length;
+  const introduced = state.products.filter(isIntroduced).length;
+  const remaining = Math.max(total - introduced, 0);
+  const entries = state.entries.length;
+  const reactions = state.entries.filter(e => e.reaction && e.reaction !== "Нет реакции").length;
+  const allergensIntroduced = state.products.filter(p => p.allergen && isIntroduced(p)).length;
+  const latestDate = state.entries.map(e => e.date).filter(Boolean).sort().at(-1) || "";
+  return { total, introduced, remaining, entries, reactions, allergensIntroduced, latestDate };
+}
+
+function renderAll() {
+  fillSelects();
+  renderHome();
+  renderProducts();
+  renderEntries();
+  renderPlan();
+}
+
+function fillSelects() {
+  const allCategoryOptions = `<option value="all">Все категории</option>` + state.categories.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("");
+  $("#productCategory").innerHTML = allCategoryOptions;
+  $("#entryCategory").innerHTML = allCategoryOptions;
+
+  const categoryOptions = state.categories.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("");
+  $$("select[name='category']").forEach(select => {
+    const current = select.value;
+    select.innerHTML = categoryOptions;
+    if (current) select.value = current;
+  });
+
+  const reactionOptions = state.reactions.map(r => `<option value="${escapeHtml(r)}">${escapeHtml(r)}</option>`).join("");
+  $("select[name='reaction']").innerHTML = reactionOptions;
+
+  const statusOptions = state.statuses.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join("");
+  $$("select[name='status']").forEach(select => {
+    const current = select.value;
+    select.innerHTML = statusOptions;
+    if (current) select.value = current;
+  });
+
+  const entryDate = $("input[name='date']");
+  if (!entryDate.value) entryDate.value = new Date().toISOString().slice(0, 10);
+
+  updateProductSelect();
+}
+
+function renderHome() {
+  const stats = getStats();
+  const percent = stats.total ? Math.round((stats.introduced / stats.total) * 100) : 0;
+  $("#heroProgress").textContent = percent + "%";
+  $("#lastDatePill").textContent = "Последняя дата: " + formatDate(stats.latestDate);
+
+  const cards = [
+    ["Всего продуктов", stats.total, "в списке"],
+    ["Введено", stats.introduced, "уже пробовали"],
+    ["Осталось", stats.remaining, "ещё не введено"],
+    ["Записей", stats.entries, "в истории"],
+    ["Реакций", stats.reactions, "кроме «Нет реакции»"],
+    ["Аллергенов", stats.allergensIntroduced, "уже введено"]
+  ];
+  $("#statsGrid").innerHTML = cards.map(([label, value, hint]) => `
+    <article class="stat-card">
+      <b>${value}</b>
+      <span>${label}<br>${hint}</span>
+    </article>
+  `).join("");
+
+  $("#categoryProgress").innerHTML = state.categories.map(category => {
+    const list = state.products.filter(p => p.category === category);
+    const introduced = list.filter(isIntroduced).length;
+    const pct = list.length ? Math.round((introduced / list.length) * 100) : 0;
+    return `
+      <div class="progress-row">
+        <div class="progress-row__top"><span>${escapeHtml(category)}</span><span>${introduced}/${list.length}</span></div>
+        <div class="progress"><i style="width:${pct}%"></i></div>
+      </div>
+    `;
+  }).join("");
+
+  const latest = [...state.entries].sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.number || 0) - (a.number || 0)).slice(0, 6);
+  $("#latestEntries").innerHTML = latest.length ? latest.map(e => `
+    <div class="mini-item">
+      <strong>${escapeHtml(e.product || "—")}</strong>
+      <small>${formatDate(e.date)} • ${escapeHtml(e.category || "—")} • ${escapeHtml(e.reaction || "—")}</small>
+    </div>
+  `).join("") : `<p class="muted">Пока нет записей.</p>`;
+
+  const allergens = state.products.filter(p => p.allergen);
+  $("#allergenList").innerHTML = allergens.length ? allergens.map(p => `
+    <span class="tag ${isIntroduced(p) ? "tag--ok" : "tag--warn"}">${escapeHtml(p.name)}${p.allergenType ? " · " + escapeHtml(p.allergenType) : ""}</span>
+  `).join("") : `<p class="muted">Аллергены не отмечены.</p>`;
+}
+
+function renderProducts() {
+  const search = ($("#productSearch").value || "").trim().toLowerCase();
+  const category = $("#productCategory").value || "all";
+  const status = $("#productStatus").value || "all";
+
+  $("#categoryChips").innerHTML = [`<button class="chip ${category === "all" ? "active" : ""}" data-cat="all">Все</button>`]
+    .concat(state.categories.map(c => `<button class="chip ${category === c ? "active" : ""}" data-cat="${escapeAttr(c)}">${escapeHtml(c)}</button>`))
+    .join("");
+
+  let list = [...state.products];
+  if (category !== "all") list = list.filter(p => p.category === category);
+  if (search) {
+    list = list.filter(p =>
+      [p.name, p.category, p.allergenType, p.note, p.status]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase()
+        .includes(search)
+    );
+  }
+  if (status === "introduced") list = list.filter(isIntroduced);
+  if (status === "not") list = list.filter(p => !isIntroduced(p));
+  if (status === "allergen") list = list.filter(p => p.allergen);
+
+  $("#productGrid").innerHTML = list.length ? list.map(productCard).join("") : `<p class="muted">Ничего не найдено.</p>`;
+
+  $$(".chip").forEach(chip => chip.addEventListener("click", () => {
+    $("#productCategory").value = chip.dataset.cat;
+    renderProducts();
+  }));
+
+  $$(".mark-introduced").forEach(btn => btn.addEventListener("click", () => {
+    const product = state.products.find(p => p.id === btn.dataset.id);
+    if (!product) return;
+    product.status = "Введён";
+    saveState();
+    renderAll();
+    showToast(`${product.name} отмечен как введён`);
+  }));
+}
+
+function productCard(p) {
+  const introduced = isIntroduced(p);
+  return `
+    <article class="product-card">
+      <div class="product-card__top">
+        <h3>${escapeHtml(p.name)}</h3>
+        <span class="tag ${introduced ? "tag--ok" : "tag--warn"}">${introduced ? "Введён" : "Не введён"}</span>
+      </div>
+      <p>${escapeHtml(p.category)}</p>
+      ${p.allergen ? `<span class="tag tag--red">Аллерген${p.allergenType ? ": " + escapeHtml(p.allergenType) : ""}</span>` : `<span class="tag">Не аллерген</span>`}
+      ${p.note ? `<p>${escapeHtml(p.note)}</p>` : ""}
+      <div class="product-actions">
+        <button class="small-btn mark-introduced" data-id="${escapeAttr(p.id)}">Отметить введён</button>
+      </div>
+    </article>
+  `;
+}
+
+function updateProductSelect() {
+  const category = $("select[name='category']").value || state.categories[0];
+  const productSelect = $("select[name='product']");
+  const products = state.products.filter(p => p.category === category);
+  productSelect.innerHTML = products.map(p => `<option value="${escapeHtml(p.name)}">${escapeHtml(p.name)}</option>`).join("");
+}
+
+function renderEntries() {
+  const search = ($("#entrySearch").value || "").trim().toLowerCase();
+  const category = $("#entryCategory").value || "all";
+  let list = [...state.entries];
+  if (category !== "all") list = list.filter(e => e.category === category);
+  if (search) {
+    list = list.filter(e =>
+      [e.product, e.category, e.reaction, e.reactionDescription, e.notes, e.status]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase()
+        .includes(search)
+    );
+  }
+  list.sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.number || 0) - (a.number || 0));
+
+  $("#entriesTable tbody").innerHTML = list.map(e => `
+    <tr>
+      <td>${formatDate(e.date)}</td>
+      <td>${escapeHtml(e.planDay || "—")}</td>
+      <td>${escapeHtml(e.category || "—")}</td>
+      <td><strong>${escapeHtml(e.product || "—")}</strong>${e.allergen ? `<br><span class="tag tag--red">${escapeHtml(e.allergenType || "Аллерген")}</span>` : ""}</td>
+      <td>${escapeHtml(e.portion || "—")}</td>
+      <td>${reactionBadge(e.reaction)}</td>
+      <td>${escapeHtml(e.status || "—")}</td>
+    </tr>
+  `).join("");
+}
+
+function reactionBadge(reaction) {
+  const safe = escapeHtml(reaction || "—");
+  return reaction && reaction !== "Нет реакции" ? `<span class="tag tag--red">${safe}</span>` : `<span class="tag tag--ok">${safe}</span>`;
+}
+
+function renderPlan() {
+  $("#planTable tbody").innerHTML = state.plan.map(row => `
+    <tr>
+      <td><strong>${escapeHtml(row.day)}</strong></td>
+      <td>${escapeHtml(row.grain || "—")}</td>
+      <td>${escapeHtml(row.protein || "—")}</td>
+      <td>${escapeHtml(row.vegetable || "—")}</td>
+      <td>${escapeHtml(row.fruit || "—")}</td>
+    </tr>
+  `).join("");
+}
+
+function setupEvents() {
+  $$(".tab").forEach(tab => {
+    tab.addEventListener("click", () => showTab(tab.dataset.tab));
+  });
+  $$("[data-go]").forEach(btn => {
+    btn.addEventListener("click", () => showTab(btn.dataset.go));
+  });
+
+  ["productSearch", "productCategory", "productStatus"].forEach(id => {
+    $("#" + id).addEventListener("input", renderProducts);
+    $("#" + id).addEventListener("change", renderProducts);
+  });
+  ["entrySearch", "entryCategory"].forEach(id => {
+    $("#" + id).addEventListener("input", renderEntries);
+    $("#" + id).addEventListener("change", renderEntries);
+  });
+
+  $("select[name='category']").addEventListener("change", updateProductSelect);
+
+  $("#productForm").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const name = (form.get("name") || "").toString().trim();
+    const category = form.get("category").toString();
+    if (!name) return;
+
+    const allergen = form.get("allergen") === "true";
+    const product = {
+      id: "p" + Date.now(),
+      name,
+      category,
+      allergen,
+      allergenType: (form.get("allergenType") || "").toString().trim(),
+      note: (form.get("note") || "").toString().trim(),
+      status: form.get("status").toString(),
+      source: "Добавлено на сайте"
+    };
+
+    state.products.push(product);
+    if (!state.categories.includes(category)) state.categories.push(category);
+    saveState();
+    event.currentTarget.reset();
+    renderAll();
+    showToast("Новый продукт добавлен");
+    showTab("products");
+  });
+
+  $("#entryForm").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const category = form.get("category").toString();
+    const productName = form.get("product").toString();
+    const product = state.products.find(p => p.name === productName && p.category === category) || state.products.find(p => p.name === productName);
+
+    const entry = {
+      id: "e" + Date.now(),
+      number: state.entries.length ? Math.max(...state.entries.map(e => Number(e.number) || 0)) + 1 : 1,
+      date: form.get("date").toString(),
+      planDay: form.get("planDay").toString(),
+      category,
+      product: productName,
+      allergen: !!product?.allergen,
+      allergenType: product?.allergenType || "",
+      portion: (form.get("portion") || "").toString(),
+      reaction: form.get("reaction").toString(),
+      reactionDescription: (form.get("reactionDescription") || "").toString(),
+      stool: (form.get("stool") || "").toString(),
+      skin: (form.get("skin") || "").toString(),
+      sleepMood: (form.get("sleepMood") || "").toString(),
+      notes: (form.get("notes") || "").toString(),
+      status: form.get("status").toString()
+    };
+
+    state.entries.push(entry);
+    if (product && ["Введён", "Повтор"].includes(entry.status)) product.status = "Введён";
+    saveState();
+    event.currentTarget.reset();
+    fillSelects();
+    renderAll();
+    showToast("Запись прикорма сохранена");
+  });
+
+  $("#exportBtn").addEventListener("click", exportData);
+  $("#importInput").addEventListener("change", importData);
+  $("#resetBtn").addEventListener("click", () => {
+    if (!confirm("Сбросить все изменения и вернуть данные из Excel?")) return;
+    state = normalizeState(structuredClone(INITIAL_DATA));
+    saveState();
+    renderAll();
+    showToast("Данные сброшены к Excel");
+  });
+}
+
+function showTab(tabId) {
+  $$(".tab").forEach(tab => tab.classList.toggle("active", tab.dataset.tab === tabId));
+  $$(".panel").forEach(panel => panel.classList.toggle("active", panel.id === tabId));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `mark-feeding-backup-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  showToast("Файл данных скачан");
+}
+
+function importData(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const imported = JSON.parse(reader.result);
+      state = normalizeState(imported);
+      saveState();
+      renderAll();
+      showToast("Данные импортированы");
+    } catch {
+      alert("Не удалось импортировать файл. Проверьте, что это JSON из этого сайта.");
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = "";
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function escapeAttr(value) {
+  return escapeHtml(value).replaceAll("`", "&#096;");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  setupEvents();
+  renderAll();
+});
+
+</script>
+</body>
+</html>
