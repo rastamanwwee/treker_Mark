@@ -86,14 +86,6 @@ button,input,select,textarea{font:inherit} button{cursor:pointer}
 
 .entryModeCard{background:linear-gradient(135deg,#fff,#eaf6f1);border:2px solid rgba(93,167,144,.28);box-shadow:0 12px 28px rgba(38,73,63,.10)}.entryModeCardHead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.entryModeCardHead h3{margin:0;font-size:20px}.entryModeCardHead p{margin:5px 0 0}.entryModeSwitch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 0}.entryModeBtn{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:18px;padding:14px 12px;font-weight:950;min-height:52px}.entryModeBtn.active{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;border-color:transparent;box-shadow:0 10px 22px rgba(47,120,104,.2)}.entryModeNote{margin:10px 0 0;color:var(--muted);font-size:12px;font-weight:800;line-height:1.4}.batchPickerBox{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(135deg,#fff,#f5fbf8)}.batchSelectedList{display:grid;gap:10px;margin-top:12px}.batchProductRow{display:grid;grid-template-columns:minmax(150px,1.25fr) minmax(145px,1fr) minmax(125px,.8fr) minmax(145px,.9fr) auto;gap:10px;align-items:end;background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px}.batchProductMain{align-self:center}.batchProductMain b{display:block;font-size:17px}.batchProductMain small{display:block;color:var(--muted);font-weight:800;line-height:1.35;margin-top:4px}.batchPortionStack{display:grid;gap:6px}.batchRemoveBtn{border:0;border-radius:999px;background:#ffe8e6;color:#b94a43;font-weight:950;padding:10px 12px;white-space:nowrap}.batchSummary{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-top:14px}.batchCount{display:inline-flex;border-radius:999px;background:var(--soft);color:var(--brand2);font-weight:950;padding:7px 11px}.batchCommonTitle{margin:18px 0 10px}.batchSubmitBtn:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}.batchHint{background:#fff8ec;border:1px solid rgba(214,159,43,.25);border-radius:16px;padding:11px 12px;color:#785111;font-size:13px;line-height:1.4;margin-top:12px}@media(max-width:900px){.batchProductRow{grid-template-columns:1fr 1fr}.batchProductMain{grid-column:span 2}.batchRemoveBtn{width:100%}}@media(max-width:560px){.batchProductRow{grid-template-columns:1fr}.batchProductMain{grid-column:auto}.entryModeSwitch{display:grid;grid-template-columns:1fr 1fr}.entryModeBtn{padding:11px 8px}}
 
-
-
-/* ===== MyBase v14 AI Assistant ===== */
-.aiFab{position:fixed;right:14px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:58;border:0;border-radius:22px;background:linear-gradient(135deg,#1f2e2a,#2f7868);color:#fff;box-shadow:0 16px 34px rgba(31,46,42,.28);padding:10px 13px;display:flex;align-items:center;gap:8px;font-weight:950}.aiFab b{font-size:22px}.aiFab span{font-size:13px}.aiFab:active{transform:scale(.97)}
-.aiOverlay{position:fixed;inset:0;z-index:90;background:rgba(18,30,26,.42);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;padding:12px}.aiSheet{width:min(760px,100%);max-height:min(88vh,900px);background:#f8faf8;border:1px solid rgba(255,255,255,.8);border-radius:30px 30px 20px 20px;box-shadow:0 24px 70px rgba(0,0,0,.28);display:grid;grid-template-rows:auto minmax(140px,1fr) auto;overflow:hidden}.aiHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:17px 17px 13px;background:linear-gradient(135deg,#1f2e2a,#2f7868);color:#fff}.aiHead h2{margin:2px 0 4px;font-size:23px}.aiHead p{margin:0;color:rgba(255,255,255,.72);font-size:12px;line-height:1.4}.aiClose{border:0;background:rgba(255,255,255,.13);color:#fff;border-radius:999px;width:38px;height:38px;font-size:20px}.aiBody{overflow:auto;padding:14px}.aiWelcome{background:#fff;border:1px solid var(--line);border-radius:20px;padding:13px;margin-bottom:12px}.aiQuickPrompts{display:flex;gap:7px;overflow:auto;padding:2px 0 10px}.aiQuickPrompts button{white-space:nowrap;border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 11px;font-size:12px;font-weight:850;color:var(--brand2)}.aiMessages{display:grid;gap:10px}.aiBubble{max-width:92%;border-radius:18px;padding:11px 12px;line-height:1.4;font-size:14px;white-space:pre-wrap}.aiBubble.user{justify-self:end;background:var(--brand2);color:#fff;border-bottom-right-radius:6px}.aiBubble.bot{justify-self:start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:6px}.aiBubble.error{justify-self:start;background:#fff4f2;color:#923e38;border:1px solid #f0c7c3}.aiTyping{display:inline-flex;gap:5px;align-items:center}.aiTyping i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:aiDot 1s infinite ease-in-out}.aiTyping i:nth-child(2){animation-delay:.15s}.aiTyping i:nth-child(3){animation-delay:.3s}@keyframes aiDot{0%,80%,100%{opacity:.28;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
-.aiPreview{margin-top:12px;background:#fff;border:1px solid rgba(93,167,144,.24);border-radius:22px;padding:13px}.aiPreviewHead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.aiPreviewHead h3{margin:0}.aiActionList{display:grid;gap:9px;margin-top:10px}.aiAction{border:1px solid var(--line);border-radius:17px;padding:11px;background:#fffefa;display:grid;grid-template-columns:auto 1fr auto;gap:9px;align-items:start}.aiActionIcon{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:var(--soft);font-size:18px}.aiAction h4{margin:0 0 3px;font-size:15px}.aiAction p{margin:0;color:var(--muted);font-size:12px;line-height:1.42}.aiRemove{border:0;background:#ffe8e6;color:#a94640;border-radius:999px;width:30px;height:30px;font-weight:950}.aiWarnings{margin-top:10px;background:#fff8e8;border:1px solid #f0dbb0;border-radius:15px;padding:10px;font-size:12px;color:#7a5a20;line-height:1.4}.aiPreviewActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.aiComposer{padding:11px 12px calc(11px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-top:1px solid var(--line)}.aiComposerGrid{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}.aiComposer textarea{min-height:54px;max-height:140px;border-radius:18px;resize:none}.aiSend{width:50px;height:50px;border:0;border-radius:17px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;font-size:21px;font-weight:950}.aiFootNote{font-size:10px;color:var(--muted);margin:7px 3px 0;line-height:1.35}.aiSetupBox{background:#fff7e6;border:1px solid #efd29c;border-radius:17px;padding:11px;margin-top:10px;color:#76501a;font-size:12px;line-height:1.45}.aiSaved{background:#eefaf4;border:1px solid rgba(47,155,101,.24);color:#286e4a;border-radius:16px;padding:10px;margin-top:10px;font-size:12px;font-weight:850}.aiOpenInline{margin-top:12px;width:100%;background:rgba(255,255,255,.13);color:#fff;border:1px solid rgba(255,255,255,.18)}
-@media(max-width:760px){.aiOverlay{padding:0}.aiSheet{width:100%;max-height:92vh;border-radius:26px 26px 0 0}.aiFab{right:10px;bottom:calc(82px + env(safe-area-inset-bottom));padding:10px 12px}.aiFab span{display:none}.aiAction{grid-template-columns:auto 1fr auto}}
-
   </style>
 </head>
 <body>
@@ -125,7 +117,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer}
         <div>
           <p class="eyebrow">Личный семейный сайт</p>
           <h1>Mark Tracker</h1>
-          <p class="sub">Выбери трекер на главной странице: прикорм Марка или накопления.</p><p class="muted small">Версия: MyBase v14 AI</p>
+          <p class="sub">Выбери трекер на главной странице: прикорм Марка или накопления.</p><p class="muted small">Версия: MyBase v13.1</p>
         </div>
         <div class="userBox">
           <span class="muted" id="userEmail">—</span>
@@ -222,21 +214,6 @@ button,input,select,textarea{font:inherit} button{cursor:pointer}
 
   <nav id="bottomNav" class="bottomNav hidden"></nav>
   <div id="toast" class="toast"></div>
-
-  <button id="aiFab" class="aiFab hidden" type="button" aria-label="Открыть ИИ-помощника"><b>🤖</b><span>ИИ-помощник</span></button>
-  <div id="aiOverlay" class="aiOverlay hidden" role="dialog" aria-modal="true" aria-labelledby="aiTitle">
-    <section class="aiSheet">
-      <header class="aiHead"><div><div class="eyebrow" style="color:#bfe8d9;margin-bottom:3px">MyBase AI</div><h2 id="aiTitle">🤖 ИИ-помощник</h2><p>Пиши обычным текстом. Сначала я покажу, что будет записано, и только потом сохраню.</p></div><button id="aiCloseBtn" class="aiClose" type="button" aria-label="Закрыть">×</button></header>
-      <div class="aiBody" id="aiBody">
-        <div class="aiWelcome"><b>Можно написать сразу всё за день.</b><p class="muted small" style="margin:6px 0 0">Например: «Сегодня утром Марк съел гречку 70 г и банан 40 г. Вес 9,9 кг. 18 августа в 10:30 педиатр. Сегодня отложил 30 000 HUF на квартиру».</p></div>
-        <div class="aiQuickPrompts" id="aiQuickPrompts"><button type="button" data-ai-example="Сегодня утром Марк ел гречку 70 г и банан 40 г, реакции не было">🥣 Прикорм</button><button type="button" data-ai-example="Сегодня вес 9.9 кг, рост 76 см">📏 Рост и вес</button><button type="button" data-ai-example="Сегодня появился верхний центральный левый зуб">🦷 Зуб</button><button type="button" data-ai-example="18 августа в 10:30 визит к педиатру">🩺 Визит</button><button type="button" data-ai-example="Сегодня отложил 30000 HUF на квартиру">💰 Накопления</button></div>
-        <div class="aiMessages" id="aiMessages"></div>
-        <div id="aiPreviewHost"></div>
-      </div>
-      <footer class="aiComposer"><div class="aiComposerGrid"><textarea id="aiInput" placeholder="Напиши, что нужно записать…" enterkeyhint="send"></textarea><button id="aiSendBtn" class="aiSend" type="button" aria-label="Отправить">↑</button></div><div class="aiFootNote">ИИ используется только для разбора твоего текста. Ничего не записывается без нажатия «Сохранить всё».</div></footer>
-    </section>
-  </div>
-
   <script type="module">
 let initializeApp, getAuth, initializeAuth, browserLocalPersistence, browserSessionPersistence, inMemoryPersistence, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut;
 let getFirestore, doc, getDoc, setDoc, serverTimestamp;
@@ -5551,7 +5528,7 @@ let feedingCalendarMonth = "";
 let feedingCalendarSelectedDate = "";
 let feedingEntryPrefillDate = "";
 let authMode = "login";
-const APP_VERSION = "MyBase v14 AI Assistant";
+const APP_VERSION = "MyBase v13.2 Multi-product Entry";
 const DATA_VERSION = "1.2";
 let diagnosticsLog = [];
 let lastSelfCheck = null;
@@ -5800,12 +5777,11 @@ window.addEventListener("unhandledrejection", (e)=>{
   else toast("Ошибка записана в диагностику");
 });
 
-function showAuth(){ $("#authScreen").classList.remove("hidden"); $("#appScreen").classList.add("hidden"); $("#bottomNav").classList.add("hidden"); $("#aiFab")?.classList.add("hidden"); $("#aiOverlay")?.classList.add("hidden"); }
+function showAuth(){ $("#authScreen").classList.remove("hidden"); $("#appScreen").classList.add("hidden"); $("#bottomNav").classList.add("hidden"); }
 function showApp(){
   $("#authScreen").classList.add("hidden");
   $("#appScreen").classList.remove("hidden");
   $("#bottomNav").classList.remove("hidden");
-  $("#aiFab")?.classList.remove("hidden");
   try{ renderAll(); }catch(e){ logDiag("error","Ошибка интерфейса",e,"showApp"); toast("Ошибка интерфейса. Открой Ещё → Диагностика"); }
 }
 
@@ -5814,7 +5790,6 @@ async function init(){
   showAuth();
   showLaunchWarning();
   bindNavigation();
-  bindAiAssistant();
 
   if(isConfigMissing){
     $("#firebaseWarning").classList.remove("hidden");
@@ -6093,7 +6068,7 @@ function smartAssistantHtml(){
   if(data.illness) items.push(["🤒",`Последняя запись болезни: <b>${esc(data.illness.symptoms||data.illness.diagnosis||"запись")}</b>`,esc(fmtDate(data.illness.startDate))]);
   upcomingEvents(2).forEach(e=>items.push([eventTypeIcon(e.type),`Событие: <b>${esc(e.title||eventTypeLabel(e.type))}</b>`,esc(fmtDate(e.date))]));
   if(!items.length) items.push(["✅","Пока нет важных напоминаний.","Добавляй данные, и помощник начнёт подсказывать."]);
-  return `<div class="assistantCard"><h3>🤖 Умный помощник</h3><p class="muted" style="color:rgba(255,255,255,.72);margin:0">Подсказки по прикорму, развитию и календарю.</p><div class="assistantList">${items.slice(0,6).map(([ico,txt,sub])=>`<div class="assistantItem"><b>${ico}</b> ${txt}${sub?`<small>${sub}</small>`:""}</div>`).join("")}</div><button class="btn aiOpenInline" type="button" data-open-ai>Открыть ИИ-помощника</button></div>`;
+  return `<div class="assistantCard"><h3>🤖 Умный помощник</h3><p class="muted" style="color:rgba(255,255,255,.72);margin:0">Подсказки по прикорму, развитию и календарю.</p><div class="assistantList">${items.slice(0,6).map(([ico,txt,sub])=>`<div class="assistantItem"><b>${ico}</b> ${txt}${sub?`<small>${sub}</small>`:""}</div>`).join("")}</div></div>`;
 }
 function dashboardPanelHtml(){
   const d=babyDashboardStats();
@@ -7254,207 +7229,6 @@ function renderSavingsSettings(){
   $("#importSavings").onchange=e=>importJson(e, async data=>{downloadFullBackup(); savings=data; normalizeSavings(); await saveSavings(); renderAll(); toast("Импортировано");});
   $("#resetSavingsDemo").onclick=async()=>{ if(confirmTypedDelete("Вернуть данные накоплений из оригинального трекера?","Текущие изменения в накоплениях будут заменены стартовыми данными.")){ downloadFullBackup(); savings=deep(DEFAULT_SAVINGS); await saveSavings(); renderAll(); toast("Данные восстановлены"); } };
 }
-
-
-// ===== MyBase v14 AI Assistant =====
-let aiDraft = null;
-let aiBusy = false;
-let aiCallable = null;
-let aiUndoSnapshot = null;
-
-function bindAiAssistant(){
-  const fab=$("#aiFab"), close=$("#aiCloseBtn"), send=$("#aiSendBtn"), input=$("#aiInput"), overlay=$("#aiOverlay");
-  if(fab) fab.onclick=openAiAssistant;
-  if(close) close.onclick=closeAiAssistant;
-  if(send) send.onclick=sendAiMessage;
-  if(input){
-    input.addEventListener("keydown",e=>{ if(e.key==="Enter" && !e.shiftKey){ e.preventDefault(); sendAiMessage(); } });
-  }
-  if(overlay) overlay.addEventListener("click",e=>{ if(e.target===overlay) closeAiAssistant(); });
-  document.addEventListener("click",e=>{
-    const open=e.target.closest?.("[data-open-ai]"); if(open){ e.preventDefault(); openAiAssistant(); return; }
-    const ex=e.target.closest?.("[data-ai-example]"); if(ex){ const inp=$("#aiInput"); if(inp){ inp.value=ex.dataset.aiExample||""; inp.focus(); } return; }
-    const remove=e.target.closest?.("[data-ai-remove]"); if(remove){ removeAiAction(Number(remove.dataset.aiRemove)); return; }
-    const save=e.target.closest?.("#aiSaveDraft"); if(save){ applyAiDraft(); return; }
-    const clear=e.target.closest?.("#aiClearDraft"); if(clear){ aiDraft=null; renderAiPreview(); return; }
-    const undo=e.target.closest?.("#aiUndoLast"); if(undo){ undoAiSave(); return; }
-  });
-}
-function openAiAssistant(){
-  if(!auth?.currentUser){ toast("Сначала войди в аккаунт"); return; }
-  $("#aiOverlay")?.classList.remove("hidden");
-  setTimeout(()=>$("#aiInput")?.focus(),80);
-}
-function closeAiAssistant(){ $("#aiOverlay")?.classList.add("hidden"); }
-function aiAddBubble(text,type="bot"){
-  const box=$("#aiMessages"); if(!box) return;
-  const el=document.createElement("div"); el.className=`aiBubble ${type}`; el.textContent=String(text||""); box.appendChild(el);
-  $("#aiBody")?.scrollTo({top:$("#aiBody").scrollHeight,behavior:"smooth"});
-}
-function aiSetTyping(show){
-  const box=$("#aiMessages"); if(!box) return;
-  $("#aiTypingBubble")?.remove();
-  if(show){ const el=document.createElement("div"); el.id="aiTypingBubble"; el.className="aiBubble bot"; el.innerHTML='<span class="aiTyping"><i></i><i></i><i></i></span>'; box.appendChild(el); }
-}
-function buildAiContext(){
-  normalizeFeedingExtras(); normalizeSavings();
-  return {
-    currentDate: today(),
-    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Budapest",
-    childName: feeding.child?.name || "Марк",
-    childBirthDate: feeding.child?.birthDate || MARK_BIRTH_DATE,
-    meals: mealOptions(),
-    categories: categories(),
-    reactions: reactions(),
-    statuses: statuses(),
-    products: (feeding.products||[]).map(p=>({name:p.name,category:p.category,status:p.status,allergen:!!p.allergen})),
-    teeth: BABY_TEETH,
-    savingsGoals: (savings.goals||[]).map(g=>({name:g.name,currency:g.currency,active:g.id===activeGoalId()})),
-    activeCurrencies: savings.activeCurrencies || [],
-    activeGoal: savings.goal?.name || "Квартира"
-  };
-}
-async function getAiCallable(){
-  if(aiCallable) return aiCallable;
-  if(!app) throw new Error("Firebase ещё не инициализирован");
-  const mod=await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js");
-  const functions=mod.getFunctions(app,"europe-west1");
-  aiCallable=mod.httpsCallable(functions,"mybaseAiParse",{timeout:65000});
-  return aiCallable;
-}
-function friendlyAiError(err){
-  const code=String(err?.code||"");
-  if(code.includes("not-found")) return "ИИ-функция ещё не опубликована в Firebase. Основной сайт продолжает работать как раньше.";
-  if(code.includes("unauthenticated")) return "Нужно заново войти в MyBase.";
-  if(code.includes("resource-exhausted")) return "Слишком много запросов. Попробуй немного позже.";
-  if(code.includes("deadline-exceeded")||code.includes("unavailable")) return "ИИ сейчас не ответил. Попробуй ещё раз.";
-  if(code.includes("failed-precondition")) return "На сервере ещё не настроен ключ OpenAI.";
-  return err?.message || "Не удалось связаться с ИИ.";
-}
-async function sendAiMessage(){
-  if(aiBusy) return;
-  const input=$("#aiInput"); const message=(input?.value||"").trim();
-  if(!message){ toast("Напиши, что нужно записать"); return; }
-  if(!auth?.currentUser){ toast("Сначала войди в аккаунт"); return; }
-  aiBusy=true; if(input) input.disabled=true; if($("#aiSendBtn")) $("#aiSendBtn").disabled=true;
-  aiDraft=null; renderAiPreview(); aiAddBubble(message,"user"); if(input) input.value=""; aiSetTyping(true);
-  try{
-    const callable=await getAiCallable();
-    const res=await callable({message,context:buildAiContext()});
-    const data=res?.data;
-    if(!data || !Array.isArray(data.actions)) throw new Error("Сервер вернул непонятный ответ");
-    aiDraft={summary:data.summary||"Готово к проверке",actions:data.actions||[],warnings:data.warnings||[]};
-    aiSetTyping(false);
-    aiAddBubble(aiDraft.summary || `Нашёл действий: ${aiDraft.actions.length}`,"bot");
-    renderAiPreview();
-  }catch(err){
-    aiSetTyping(false); logDiag("warn","Ошибка ИИ-помощника",err,"AI");
-    aiAddBubble(friendlyAiError(err),"error");
-    const host=$("#aiPreviewHost"); if(host && String(err?.code||"").includes("not-found")) host.innerHTML='<div class="aiSetupBox"><b>ИИ-интерфейс уже встроен.</b><br>Осталось один раз развернуть серверную Firebase Function и сохранить OpenAI API key как секрет. До этого все обычные функции MyBase работают без изменений.</div>';
-  }finally{
-    aiBusy=false; if(input) input.disabled=false; if($("#aiSendBtn")) $("#aiSendBtn").disabled=false; input?.focus();
-  }
-}
-function aiActionPresentation(a){
-  const kind=a?.kind||"";
-  if(kind==="feeding") return {icon:"🥣",title:a.product||"Прикорм",detail:[a.date?fmtDate(a.date):"сегодня",a.meal,a.portion,a.reaction].filter(Boolean).join(" • ")+(a.category?` • ${a.category}`:"")};
-  if(kind==="growth") return {icon:"📏",title:"Рост и вес",detail:[a.date?fmtDate(a.date):"сегодня",a.weightKg!=null?`${a.weightKg} кг`:"",a.heightCm!=null?`${a.heightCm} см`:"",a.note].filter(Boolean).join(" • ")};
-  if(kind==="tooth") return {icon:"🦷",title:a.tooth||"Зуб",detail:[a.date?fmtDate(a.date):"сегодня",a.note].filter(Boolean).join(" • ")};
-  if(kind==="family_event") return {icon:a.eventType==="doctor"?"🩺":a.eventType==="vaccine"?"💉":"📅",title:a.title||"Событие",detail:[a.date?fmtDate(a.date):"",a.time,eventTypeLabel(a.eventType),a.note].filter(Boolean).join(" • ")};
-  if(kind==="illness") return {icon:"🤒",title:a.symptoms||a.diagnosis||"Запись о здоровье",detail:[a.startDate?fmtDate(a.startDate):"",a.temperatureC!=null?`${a.temperatureC} °C`:"",a.meds,a.note].filter(Boolean).join(" • ")};
-  if(kind==="document") return {icon:"📄",title:a.title||"Документ",detail:[a.documentType,a.issueDate?`выдан ${fmtDate(a.issueDate)}`:"",a.expireDate?`до ${fmtDate(a.expireDate)}`:"",a.note].filter(Boolean).join(" • ")};
-  if(kind==="savings_transaction") return {icon:"💰",title:`${a.transactionType==="expense"?"Расход":"Пополнение"}: ${a.amount||0} ${a.currency||""}`,detail:[a.date?fmtDate(a.date):"сегодня",a.goalName||savings.goal?.name,a.note].filter(Boolean).join(" • ")};
-  return {icon:"📝",title:"Запись",detail:JSON.stringify(a)};
-}
-function renderAiPreview(){
-  const host=$("#aiPreviewHost"); if(!host) return;
-  if(!aiDraft){ host.innerHTML=aiUndoSnapshot?'<div class="aiSaved">Последняя запись ИИ сохранена. <button class="btn" id="aiUndoLast" type="button" style="margin-left:6px">Отменить последнее сохранение</button></div>':""; return; }
-  const actions=aiDraft.actions||[];
-  host.innerHTML=`<div class="aiPreview"><div class="aiPreviewHead"><div><h3>Проверь перед сохранением</h3><p class="muted small" style="margin:4px 0 0">Будет создано записей: ${actions.length}</p></div><span class="badge green">ничего ещё не записано</span></div><div class="aiActionList">${actions.map((a,i)=>{const v=aiActionPresentation(a); return `<div class="aiAction"><div class="aiActionIcon">${v.icon}</div><div><h4>${esc(v.title)}</h4><p>${esc(v.detail||"Без дополнительных данных")}</p></div><button class="aiRemove" type="button" data-ai-remove="${i}" title="Не сохранять эту запись">×</button></div>`}).join("") || '<p class="muted small">ИИ не нашёл данных, которые можно безопасно записать.</p>'}</div>${(aiDraft.warnings||[]).length?`<div class="aiWarnings"><b>Нужно обратить внимание:</b><br>${aiDraft.warnings.map(esc).join("<br>")}</div>`:""}<div class="aiPreviewActions"><button class="btn btnPrimary" id="aiSaveDraft" type="button" ${actions.length?"":"disabled"}>✅ Сохранить всё</button><button class="btn" id="aiClearDraft" type="button">Не сохранять</button></div></div>`;
-  $("#aiBody")?.scrollTo({top:$("#aiBody").scrollHeight,behavior:"smooth"});
-}
-function removeAiAction(index){ if(!aiDraft?.actions) return; aiDraft.actions.splice(index,1); renderAiPreview(); }
-function aiNormalizeMeal(value){ const q=normalizeSearch(value); if(!q) return "Не указано"; if(q.includes("обед")||q.includes("день")) return "Обед"; if(q.includes("веч")) return "Вечер"; if(q.includes("утр")) return "Утро"; return mealOptions().find(m=>normalizeSearch(m)===q)||String(value||"Не указано"); }
-function aiFindProduct(name,category){
-  const q=normalizeSearch(name); if(!q) return null;
-  return (feeding.products||[]).find(p=>normalizeSearch(p.name)===q && (!category||normalizeSearch(p.category)===normalizeSearch(category))) || (feeding.products||[]).find(p=>normalizeSearch(p.name)===q) || null;
-}
-function aiEnsureProduct(a){
-  let p=aiFindProduct(a.product,a.category); if(p) return p;
-  const category=categories().find(c=>normalizeSearch(c)===normalizeSearch(a.category)) || categories().at(-1) || "Фрукт / або інше";
-  p={id:"pai"+Date.now()+Math.random().toString(16).slice(2),name:String(a.product||"Новый продукт").trim(),category,allergen:a.allergen===true,allergenType:a.allergenType||"",note:"Добавлен через ИИ-помощника",status:"Не введён",source:"AI"};
-  feeding.products.push(p); return p;
-}
-function aiResolvePlanDay(date,requested,map){
-  if(n(requested)>0) return n(requested);
-  if(map.has(date)) return map.get(date);
-  const existing=entriesForDate(date)[0]?.planDay; const value=n(existing)||nextFeedingPlanDay(); map.set(date,value); return value;
-}
-function aiFindTooth(name){ const q=normalizeSearch(name); return BABY_TEETH.find(t=>normalizeSearch(t)===q) || BABY_TEETH.find(t=>q && normalizeSearch(t).includes(q)) || null; }
-function aiFindGoal(name){ const q=normalizeSearch(name); return (savings.goals||[]).find(g=>q&&normalizeSearch(g.name)===q) || (savings.goals||[]).find(g=>g.id===activeGoalId()) || (savings.goals||[])[0]; }
-async function applyAiDraft(){
-  if(!aiDraft?.actions?.length || aiBusy) return;
-  aiBusy=true; aiUndoSnapshot={feeding:deep(feeding),savings:deep(savings)};
-  let feedingChanged=false,savingsChanged=false,saved=0,skipped=[]; const planDays=new Map();
-  try{
-    normalizeFeedingExtras(); normalizeSavings();
-    for(const a of aiDraft.actions){
-      try{
-        if(a.kind==="feeding"){
-          if(!a.product){ skipped.push("Прикорм без названия продукта"); continue; }
-          const date=a.date||today(), p=aiEnsureProduct(a), status=a.status||suggestedEntryStatus(p,date);
-          feeding.entries.push({id:"eai"+Date.now()+Math.random().toString(16).slice(2),date,planDay:aiResolvePlanDay(date,a.planDay,planDays),age:babyAgeLabel(date),meal:aiNormalizeMeal(a.meal),status,category:p.category,product:p.name,productId:p.id,portion:a.portion||"",reaction:a.reaction||"",stool:a.stool||"",skin:a.skin||"",sleepMood:a.sleepMood||"",reactionDescription:a.reactionDescription||"",notes:a.note||"",source:"AI"});
-          if(isStatusIntroduced(status)) p.status="Введён"; feedingChanged=true; saved++; addAudit("ИИ добавил прикорм",`${p.name} • ${date}`,"ИИ"); continue;
-        }
-        if(a.kind==="growth"){
-          if(a.weightKg==null && a.heightCm==null){ skipped.push("Рост/вес без измерения"); continue; }
-          feeding.development.growth.push({id:"gai"+Date.now()+Math.random().toString(16).slice(2),date:a.date||today(),weight:a.weightKg==null?"":String(a.weightKg),height:a.heightCm==null?"":String(a.heightCm),note:a.note||"Добавлено через ИИ"}); feedingChanged=true;saved++; addAudit("ИИ добавил измерение",a.date||today(),"ИИ"); continue;
-        }
-        if(a.kind==="tooth"){
-          const tooth=aiFindTooth(a.tooth); if(!tooth){ skipped.push(`Не удалось точно определить зуб: ${a.tooth||"—"}`); continue; }
-          feeding.development.teeth[tooth]={date:a.date||today(),note:a.note||"Добавлено через ИИ"}; feedingChanged=true;saved++; addAudit("ИИ отметил зуб",tooth,"ИИ"); continue;
-        }
-        if(a.kind==="family_event"){
-          const type=["doctor","vaccine","docs","family","reminder","other"].includes(a.eventType)?a.eventType:"other";
-          feeding.familyEvents.push({id:"feai"+Date.now()+Math.random().toString(16).slice(2),date:a.date||today(),time:a.time||"",type,title:a.title||eventTypeLabel(type),note:a.note||""}); feedingChanged=true;saved++; addAudit("ИИ добавил событие",a.title||eventTypeLabel(type),"ИИ"); continue;
-        }
-        if(a.kind==="illness"){
-          feeding.development.illnesses.push({id:"illai"+Date.now()+Math.random().toString(16).slice(2),startDate:a.startDate||a.date||today(),endDate:a.endDate||"",temperature:a.temperatureC==null?"":String(a.temperatureC),symptoms:a.symptoms||"",meds:a.meds||"",diagnosis:a.diagnosis||"",notes:a.note||""}); feedingChanged=true;saved++; addAudit("ИИ добавил запись здоровья",a.symptoms||a.diagnosis||"Запись","ИИ"); continue;
-        }
-        if(a.kind==="document"){
-          if(!a.title){ skipped.push("Документ без названия"); continue; }
-          feeding.documents.push({id:"docai"+Date.now()+Math.random().toString(16).slice(2),type:a.documentType||"Другое",title:a.title,issueDate:a.issueDate||"",expireDate:a.expireDate||"",note:a.note||""}); feedingChanged=true;saved++; addAudit("ИИ добавил документ",a.title,"ИИ"); continue;
-        }
-        if(a.kind==="savings_transaction"){
-          const amount=n(a.amount); if(amount<=0){ skipped.push("Накопления без суммы"); continue; }
-          if(!a.currency){ skipped.push("Для накопления не указана валюта"); continue; }
-          const cur=String(a.currency).toUpperCase();
-          if(!(savings.activeCurrencies||[]).includes(cur)){ skipped.push(`Валюта ${cur} не настроена во вкладке «Валюты»`); continue; }
-          const goal=aiFindGoal(a.goalName); savings.transactions.unshift({id:"tai"+Date.now()+Math.random().toString(16).slice(2),goalId:goal?.id||activeGoalId(),type:a.transactionType==="expense"?"expense":"income",amount,currency:cur,rateAtAdd:currentRate(cur),date:a.date||today(),note:a.note||"Добавлено через ИИ"}); savingsChanged=true;saved++; addAudit("ИИ добавил запись накоплений",`${amount} ${cur}`,"ИИ"); continue;
-        }
-      }catch(err){ skipped.push(err?.message||String(err)); logDiag("warn","Не удалось применить действие ИИ",err,"AI.apply"); }
-    }
-    if(feedingChanged) await saveFeeding();
-    if(savingsChanged){ if(feedingChanged || (feeding.auditLog||[]).length) await saveFeeding(); await saveSavings(); }
-    aiDraft=null; renderAll(); renderAiPreview(); aiAddBubble(`Сохранено записей: ${saved}${skipped.length?`. Пропущено: ${skipped.length}`:""}.`,"bot");
-    if(skipped.length) aiAddBubble(skipped.join("\n"),"error");
-    toast(`ИИ сохранил: ${saved}`);
-  }catch(err){
-    if(aiUndoSnapshot){
-      feeding=deep(aiUndoSnapshot.feeding); savings=deep(aiUndoSnapshot.savings);
-      try{ await saveFeeding(); await saveSavings(); }catch(rollbackErr){ logDiag("error","Не удалось сохранить откат ИИ",rollbackErr,"AI.rollback"); }
-    }
-    logDiag("error","Ошибка сохранения данных ИИ",err,"AI.apply"); aiAddBubble("Не удалось сохранить. Изменения откатил.","error");
-  }finally{ aiBusy=false; }
-}
-async function undoAiSave(){
-  if(!aiUndoSnapshot || aiBusy) return;
-  aiBusy=true;
-  try{ const snap=aiUndoSnapshot; feeding=deep(snap.feeding); savings=deep(snap.savings); await saveFeeding(); await saveSavings(); aiUndoSnapshot=null; renderAll(); renderAiPreview(); aiAddBubble("Последнее сохранение ИИ отменено.","bot"); toast("Изменения ИИ отменены"); }
-  catch(err){ logDiag("error","Ошибка отмены ИИ",err,"AI.undo"); aiAddBubble("Не удалось отменить сохранение.","error"); }
-  finally{ aiBusy=false; }
-}
-
 function downloadJson(name, data){ const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name; a.click(); URL.revokeObjectURL(a.href); }
 function importJson(e, cb){
   const f=e.target.files?.[0]; if(!f) return;
